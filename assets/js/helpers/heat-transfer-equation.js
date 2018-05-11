@@ -50,6 +50,6 @@ function fi(Vx){
 }
 
 let lambda = 108;
-let Cp = 2137;
+let Cp = 2137;//Cp=4.2*10**6//4.2
 let Cn = 4.2;
 let h = 0.1;
