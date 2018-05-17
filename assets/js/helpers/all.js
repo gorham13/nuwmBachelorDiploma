@@ -2,40 +2,47 @@ import moisture from './moisture-transfer-equation'
 import heat from './heat-transfer-equation'
 import heatMass from './heat-mass-transfer-equation'
 
-export default function res() {
+export default function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
     let H = [[]];
     let T = [[]];
     let C = [[]];
-    for(var j = 0; j < 31; ++j){
-        H[0][j] = j;
-        T[0][j] = j;
-        C[0][j] = j;
+
+    for(var j = 0; j <= Td/dt; ++j){
+        H[0][j] = j*dt;
+        T[0][j] = j*dt;
+        C[0][j] = j*dt;
     }
-    for(var i = 1; i < 6; ++i){
+    let dh = (h2 - h1)/n;
+    let dt1 = (t2 - t1)/n;
+    let dc = (c2 - c1)/n;
+    for(var i = 1; i <= n; ++i){
         H.push([]);
-        H[i][j - 1] = i/10;
-        H[i][0] = i/10;
+        // console.log(dh)
+        H[i][j - 1] = h1 + i*dh - 0.2;
+        H[i][0] = h1 + i*dh;
 
         T.push([]);
-        T[i][j - 1] = i/10;
-        T[i][0] = i/10;
+        T[i][j - 1] = t1 + i*dt1;
+        T[i][0] = t1 + i*dt1;
 
         C.push([]);
-        C[i][j - 1] = i/10;
-        C[i][0] = i/10;
+        C[i][j - 1] = c1 + i*dc;
+        C[i][0] = c1 + i*dc;
     }
-    for(var i = 1; i < 6; ++i){
+    for(var i = 1; i <= n; ++i){
         let alpha = {
             moisture: 0,
             heat: 0,
             heatMass: 0
         }
+        console.log('H', H);
+        console.log('H[i][0]', H[i][0]);
         let beta = {
             moisture: H[i][0],
             heat: T[i][0],
             heatMass: C[i][0]
         }
-        for(var j = 29; j > 0; --j){
+        for(var j = H[i].length - 2; j > 0; --j){
             H[i][j] = moisture(H, C, T, i, j, beta, alpha);
             T[i][j] = heat(H, C, T, i, j, beta, alpha);
             C[i][j] = heatMass(H, C, T, i, j, beta, alpha);

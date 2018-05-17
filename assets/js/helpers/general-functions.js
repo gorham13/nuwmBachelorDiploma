@@ -20,6 +20,7 @@ export default {
     },
     
     nextBeta(prevBeta, alpha, a, c, f){
+        console.log('prevBeta', prevBeta, 'alpha', alpha, 'a', a, 'c', c, 'f', f);
         return (a*prevBeta + f)/(c - alpha*a);
     },
 }

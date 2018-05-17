@@ -73,8 +73,8 @@ let sigma = 0.4;
 let tau = 1;
 let h = 0.1;
 let lambda = 108;
-// let Cp = 2137;
-let Cn = 4.2;//Cn=4.2*10**6
+// let Cp = 2137;//Cp=4.2*10**6//4.2
+let Cn = 4.2;//Cn=3*10**6
 let Cz = 350;
 let Dt = 0.002;
 
