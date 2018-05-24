@@ -27,6 +27,7 @@ export default {
         }
     },
     mounted(){
+        console.log('mounted');
         var dom = this.$refs.container;
                 var myChart = echarts.init(dom);
                 var app = {};
@@ -72,7 +73,6 @@ export default {
             if (option && typeof option === "object") {
                 myChart.setOption(option, true);
             }
-            console.log('mounted start');
     },
     methods: {
       getChartData(){

@@ -532,7 +532,6 @@ module.exports = function normalizeComponent (
         return b / (c - prevAlpha * a);
     },
     nextBeta: function nextBeta(prevBeta, alpha, a, c, f) {
-        console.log('prevBeta', prevBeta, 'alpha', alpha, 'a', a, 'c', c, 'f', f);
         return (a * prevBeta + f) / (c - alpha * a);
     }
 });
@@ -14330,11 +14329,11 @@ module.exports = Cancel;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_general_functions__ = __webpack_require__(3);
 
 
-function filteringSpeed(H, C, T, i, j) {
-    var _Ki = Ki(H[i][j], C[i][j], T[i][j], H[i][j - 1], C[i][j - 1], T[i][j - 1]);
+function filteringSpeed(H, C, T, i, j, h) {
+    var _Ki = Ki(H[i + 1][j], C[i][j], T[i][j], H[i][j - 1], C[i][j - 1], T[i][j - 1]);
 
     //let Nui = Nui(Ci, Ci_1);
-    return _Ki * (H[i][j + 1] - H[i][j]) / h - _Ki * (H[i][j] - H[i][j - 1]) / h - mu2 * (T[i][j + 1] - T[i][j]) / h - Nui(C[i][j], C[i][j - 1]) * (C[i][j + 1] - C[i][j]) / h - Nui(C[i][j], C[i][j - 1]) * (C[i][j] - C[i][j - 1]) / h;
+    return _Ki * (H[i + 1][j + 1] - H[i + 1][j]) / h - _Ki * (H[i + 1][j] - H[i][j - 1]) / h - mu2 * (T[i + 1][j + 1] - T[i][j]) / h - Nui(C[i][j], C[i][j - 1]) * (C[i + 1][j + 1] - C[i][j]) / h - Nui(C[i][j], C[i][j - 1]) * (C[i][j] - C[i][j - 1]) / h;
 }
 
 function Ki(Hi, Ci, Ti, Hi_1, Ci_1, Ti_1) {
@@ -47792,11 +47791,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         calculation: function calculation() {
-            var _res = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_all__["a" /* default */])(this.T, this.dt, this.h1, this.h2, this.t1, this.t2, this.c1, this.c2, this.n);
+            var _this = this;
 
-            this.moisture = _res.H;
-            this.heat = _res.T;
-            this.heatMass = _res.C;
+            this.moisture = [];
+            this.heat = [];
+            this.heatMass = [];
+
+            setTimeout(function () {
+                var _res = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_all__["a" /* default */])(_this.T, _this.dt, _this.h1, _this.h2, _this.t1, _this.t2, _this.c1, _this.c2, _this.n);
+
+                _this.moisture = _res.H;
+                _this.heat = _res.T;
+                _this.heatMass = _res.C;
+            });
         }
     }
 });
@@ -47826,38 +47833,38 @@ function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
     }
     var dh = (h2 - h1) / n;
     var dt1 = (t2 - t1) / n;
+    console.log('t1', t1, 't2', t2, 'dt', dt1);
     var dc = (c2 - c1) / n;
     for (var i = 1; i <= n; ++i) {
         H.push([]);
-        // console.log(dh)
-        H[i][j - 1] = h1 + i * dh - 0.2;
-        H[i][0] = h1 + i * dh;
+        H[i][j - 1] = h1 * 1 + i * dh - dt / 45;
+        H[i][0] = h1 * 1 + i * dh;
 
         T.push([]);
-        T[i][j - 1] = t1 + i * dt1;
-        T[i][0] = t1 + i * dt1;
+        T[i][j - 1] = t1 * 1 + i * dt1;
+        T[i][0] = t1 * 1 + i * dt1;
 
         C.push([]);
-        C[i][j - 1] = c1 + i * dc;
-        C[i][0] = c1 + i * dc;
+        C[i][j - 1] = c1 * 1 + i * dc;
+        C[i][0] = c1 * 1 + i * dc;
     }
     for (var i = 1; i <= n; ++i) {
         var alpha = {
             moisture: 0,
             heat: 0,
             heatMass: 0
-        };
-        console.log('H', H);
-        console.log('H[i][0]', H[i][0]);
-        var beta = {
+            // console.log('H', H);
+            // console.log('H[i][0]', H[i][0]);
+        };var beta = {
             moisture: H[i][0],
             heat: T[i][0],
             heatMass: C[i][0]
         };
         for (var j = H[i].length - 2; j > 0; --j) {
-            H[i][j] = Object(__WEBPACK_IMPORTED_MODULE_0__moisture_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha);
-            T[i][j] = Object(__WEBPACK_IMPORTED_MODULE_1__heat_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha);
-            C[i][j] = Object(__WEBPACK_IMPORTED_MODULE_2__heat_mass_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha);
+            // console.log(H[0][j]);
+            H[i][j] = Object(__WEBPACK_IMPORTED_MODULE_0__moisture_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha, Math.abs(dh), Math.abs(dt));
+            T[i][j] = Object(__WEBPACK_IMPORTED_MODULE_1__heat_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha, Math.abs(dh));
+            C[i][j] = Object(__WEBPACK_IMPORTED_MODULE_2__heat_mass_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha, Math.abs(dh), Math.abs(dt));
         }
     }
     return { H: H, T: T, C: C };
@@ -47880,50 +47887,46 @@ var T = 3;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_functions__ = __webpack_require__(3);
 
 
-function nextH(H, C, T, i, j, beta, alpha) {
+function nextH(H, C, T, i, j, beta, alpha, h, tau) {
+
     var mu = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].mu(h, H[i - 1][j + 1], H[i - 1][j - 1]);
-    console.log('mu', mu);
+    // console.log('mu', mu);
     var _L = L(H, C, T, i, j);
-    var _a = a(_L);
+    var _a = a(_L, h);
     var _L1 = L1(H, C, T, i, j);
-    var _b = b(_L1);
-    var _c = c(_a, _b, mu);
-    console.log('_L', _L);
-    console.log('_a', _a);
-    console.log('_L1', _L1);
-    console.log('_b', _b);
-    console.log('_c', _c);
+    var _b = b(_L1, h);
+    var _c = c(_a, _b, mu, tau);
+    // console.log('_L', _L);
+    // console.log('_a', _a);
+    // console.log('_L1',_L1);
+    // console.log('_b',_b);
+    // console.log('_c', _c);
 
     var _M = M(C, i, j);
     var _M1 = M1(C, i, j);
-    console.log('_M', _M);
-    console.log('_M1', _M1);
-    var _f = f(_M, _M1, mu, H, C, i, j, F(i * h));
-    console.log('_f', _f);
+
+    var _f = f(_M, _M1, mu, H, C, i, j, F(i * h), tau, h);
 
     beta.moisture = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextBeta(beta.moisture, alpha.moisture, _a, _c, _f);
     alpha.moisture = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextAlpha(alpha.moisture, _a, _b, _c);
-    console.log('beta.moisture', beta.moisture);
-    console.log('alpha.moisture', alpha.moisture);
-    console.log('H[i][j + 1]', H[i][j + 1]);
-    console.log('alpha.moisture*H[i][j + 1] + beta.moisture', alpha.moisture * H[i][j + 1] + beta.moisture);
+
     return alpha.moisture * H[i][j + 1] + beta.moisture;
 };
 
-function a(L) {
+function a(L, h) {
     return L / (h * h);
 }
 
-function b(L1) {
+function b(L1, h) {
     return L1 / (h * h);
 }
 
-function c(a, b, mu) {
+function c(a, b, mu, tau) {
     return a + b + mu / tau;
 }
 
-function f(M, M1, mu, H, C, i, j, F) {
-    return mu * H[i - 1][j] / tau + F; //+ M1*(Ci1-Ci)/(h*h) + M1*(Ci-Ci0)/(h*h) 
+function f(M, M1, mu, H, C, i, j, F, tau, h) {
+    return mu * H[i - 1][j] / tau + F + M1 * (C[i][j + 1] - C[i - 1][j]) / h + M1 * (C[i - 1][j] - C[i - 1][j - 1]) / h;
 }
 
 function M(C, i, j) {
@@ -47931,7 +47934,7 @@ function M(C, i, j) {
 }
 
 function M1(C, i, j) {
-    return 0.5 * (__WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nu(C[i - 1][j]) + __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nu(C[i - 1][j + 1]));
+    return 0.5 * (__WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nu(C[i - 1][j]) + __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nu(C[i][j + 1]));
 }
 
 function L(H, C, T, i, j) {
@@ -47939,18 +47942,15 @@ function L(H, C, T, i, j) {
 }
 
 function L1(H, C, T, i, j) {
-    return __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].k(H[i - 1][j + 1], C[i - 1][j + 1], T[i - 1][j]) + __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].k(H[i - 1][j], C[i - 1][j], T[i - 1][j]);
+    return __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].k(H[i][j + 1], C[i][j + 1], T[i - 1][j]) + __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].k(H[i - 1][j], C[i - 1][j], T[i - 1][j]);
 }
 
 function F(x) {
     return eps * (-x / l + 1);
 }
 
-var h = 0.1;
-var tau = 1;
 var eps = 0.5;
 var k0 = 1;
-var T = 30;
 var l = 5;
 var ro = 1000;
 var Cz = 350;
@@ -47966,15 +47966,14 @@ var Cz = 350;
 
 
 
-function nextT(H, C, T, i, j, beta, alpha) {
+function nextT(H, C, T, i, j, beta, alpha, h) {
 
-    var _Vx = Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__["a" /* default */])(H, C, T, i - 1, j);
+    var _Vx = Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__["a" /* default */])(H, C, T, i - 1, j, h);
 
-    var _a = a(_Vx);
-    var _b = b(_Vx);
-    var _c = c(_a, _b);
-
-    var _f = f(T, i, j);
+    var _a = a(_Vx, h);
+    var _b = b(_Vx, h);
+    var _c = c(_a, _b, h);
+    var _f = f(T, i, j, h);
 
     beta.heat = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextBeta(beta.heat, alpha.heat, _a, _c, _f);
     alpha.heat = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextAlpha(alpha.heat, _a, _b, _c);
@@ -47982,19 +47981,19 @@ function nextT(H, C, T, i, j, beta, alpha) {
     return alpha.heat * T[i][j + 1] + beta.heat;
 };
 
-function a(Vx) {
-    return fi(Vx) / (h * h) - ksi_minus(Vx) / h;
+function a(Vx, h) {
+    return fi(Vx, h) / (h * h) - ksi_minus(Vx) / h;
 }
 
-function b(Vx) {
-    return fi(Vx) / (h * h) + ksi_plus(Vx) / h;
+function b(Vx, h) {
+    return fi(Vx, h) / (h * h) + ksi_plus(Vx) / h;
 }
 
-function c(a, b) {
+function c(a, b, h) {
     return a + b + Cn / (lambda * h);
 }
 
-function f(T, i, j) {
+function f(T, i, j, h) {
     return Cn / (lambda * h) * T[i - 1][j];
 }
 
@@ -48010,14 +48009,13 @@ function ksi(Vx) {
     return ksi_minus(Vx) + ksi_plus(Vx);
 }
 
-function fi(Vx) {
+function fi(Vx, h) {
     return 1 / (1 + Cp * h * Vx / (2 * lambda));
 }
 
 var lambda = 108;
-var Cp = 2137; //Cp=4.2*10**6//4.2
-var Cn = 4.2;
-var h = 0.1;
+var Cp = 4.2 * Math.pow(10, 6); //Cp = 2137;//4.2
+var Cn = 3 * Math.pow(10, 6); //4.2;
 
 /***/ }),
 /* 49 */
@@ -48030,16 +48028,16 @@ var h = 0.1;
 
 
 
-function nextC(H, C, T, i, j, beta, alpha) {
-    var _Vx = Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__["a" /* default */])(H, C, T, i - 1, j);
+function nextC(H, C, T, i, j, beta, alpha, h, tau) {
+    var _Vx = Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__["a" /* default */])(H, C, T, i - 1, j, h);
     var _d_i = d_i(C, T, H, i, j);
     var _d_i1 = d_i1(C, T, H, i, j);
 
-    var _a = a(_Vx, _d_i);
-    var _b = b(_Vx, _d_i1);
-    var _c = c(_a, _b);
+    var _a = a(_Vx, _d_i, h);
+    var _b = b(_Vx, _d_i1, h);
+    var _c = c(_a, _b, h);
 
-    var _f = f(C, T, i, j);
+    var _f = f(C, T, i, j, h, tau);
 
     beta.heatMass = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextBeta(beta.heatMass, alpha.heatMass, _a, _c, _f);
     alpha.heatMass = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextAlpha(alpha.heatMass, _a, _b, _c);
@@ -48047,20 +48045,20 @@ function nextC(H, C, T, i, j, beta, alpha) {
     return alpha.heatMass * C[i][j + 1] + beta.heatMass;
 };
 
-function a(Vx, d_i) {
-    return eta_i(Vx, d_i) * d_i / (h * h) - r_minus(Vx) / h;
+function a(Vx, d_i, h) {
+    return eta_i(Vx, d_i, h) * d_i / (h * h) - r_minus(Vx) / h;
 }
 
-function b(Vx, d_i1) {
-    return eta_2i(Vx, d_i1) * d_i1 / (h * h) + r_plus(Vx) / h;
+function b(Vx, d_i1, h) {
+    return eta_2i(Vx, d_i1, h) * d_i1 / (h * h) + r_plus(Vx) / h;
 }
 
-function c(a, b) {
+function c(a, b, h) {
     return a + b + Cn / (lambda * h);
 }
 
-function f(C, T, i, j) {
-    return sigma / tau * C[i - 1][j] + gamma * Cz + Dt * ( /*T[i][j-1]*/-2 * T[i][j] + T[i][j + 1]) / (h * h);
+function f(C, T, i, j, h, tau) {
+    return sigma / tau * C[i - 1][j] + gamma * Cz + Dt * (T[i - 1][j - 1] - 2 * T[i][j] + T[i][j + 1]) / (h * h);
 }
 
 function r_minus(Vx) {
@@ -48075,11 +48073,11 @@ function r(Vx) {
     return r_minus(Vx) + r_plus(Vx);
 }
 
-function eta_i(Vx, d_i) {
+function eta_i(Vx, d_i, h) {
     return 1 / (1 + h * r(Vx) / (2 * d_i));
 }
 
-function eta_2i(Vx, d_i1) {
+function eta_2i(Vx, d_i1, h) {
     return 1 / (1 + h * r(Vx) / (2 * d_i1));
 }
 
@@ -48099,11 +48097,9 @@ function d_i1(C, T, H, i, j) {
 
 var gamma = 0.0065;
 var sigma = 0.4;
-var tau = 1;
-var h = 0.1;
 var lambda = 108;
 // let Cp = 2137;//Cp=4.2*10**6//4.2
-var Cn = 4.2; //Cn=3*10**6
+var Cn = Cn = 3 * Math.pow(10, 6); //4.2;
 var Cz = 350;
 var Dt = 0.002;
 
@@ -48729,6 +48725,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
     },
     mounted: function mounted() {
+        console.log('mounted');
         var dom = this.$refs.container;
         var myChart = echarts.init(dom);
         var app = {};
@@ -48770,7 +48767,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         if (option && (typeof option === 'undefined' ? 'undefined' : _typeof(option)) === "object") {
             myChart.setOption(option, true);
         }
-        console.log('mounted start');
     },
 
     methods: {
@@ -48997,6 +48993,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 tmpArr.push({
                     name: 'name' + i,
                     type: 'line',
+                    smooth: true,
                     // stack: 'stack',
                     // label: {
                     //   normal: {
@@ -49214,6 +49211,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 tmpArr.push({
                     name: 'name' + i,
                     type: 'line',
+                    smooth: true,
                     // stack: 'stack',
                     // label: {
                     //   normal: {

@@ -155,11 +155,17 @@
         },
         methods: {
             calculation(){
-                let _res = res(this.T, this.dt, this.h1, this.h2, this.t1, this.t2, this.c1, this.c2, this.n);
+                this.moisture = [];
+                this.heat = [];
+                this.heatMass = [];
 
-                this.moisture = _res.H;
-                this.heat = _res.T;
-                this.heatMass = _res.C;
+                setTimeout(()=>{
+                    let _res = res(this.T, this.dt, this.h1, this.h2, this.t1, this.t2, this.c1, this.c2, this.n);
+
+                    this.moisture = _res.H;
+                    this.heat = _res.T;
+                    this.heatMass = _res.C;
+                });
             }
         }
     }

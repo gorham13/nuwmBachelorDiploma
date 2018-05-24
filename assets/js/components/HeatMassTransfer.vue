@@ -81,6 +81,7 @@ export default {
           tmpArr.push({
             name:'name'+i,
             type:'line',
+            smooth: true,
             // stack: 'stack',
             // label: {
             //   normal: {

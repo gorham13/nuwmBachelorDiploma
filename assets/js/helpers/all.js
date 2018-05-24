@@ -14,20 +14,20 @@ export default function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
     }
     let dh = (h2 - h1)/n;
     let dt1 = (t2 - t1)/n;
+    console.log('t1', t1, 't2', t2, 'dt', dt1);
     let dc = (c2 - c1)/n;
     for(var i = 1; i <= n; ++i){
         H.push([]);
-        // console.log(dh)
-        H[i][j - 1] = h1 + i*dh - 0.2;
-        H[i][0] = h1 + i*dh;
+        H[i][j - 1] = h1*1 + i*dh - dt/45;
+        H[i][0] = h1*1 + i*dh;
 
         T.push([]);
-        T[i][j - 1] = t1 + i*dt1;
-        T[i][0] = t1 + i*dt1;
+        T[i][j - 1] = t1*1 + i*dt1;
+        T[i][0] = t1*1 + i*dt1;
 
         C.push([]);
-        C[i][j - 1] = c1 + i*dc;
-        C[i][0] = c1 + i*dc;
+        C[i][j - 1] = c1*1 + i*dc;
+        C[i][0] = c1*1 + i*dc;
     }
     for(var i = 1; i <= n; ++i){
         let alpha = {
@@ -35,17 +35,18 @@ export default function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
             heat: 0,
             heatMass: 0
         }
-        console.log('H', H);
-        console.log('H[i][0]', H[i][0]);
+        // console.log('H', H);
+        // console.log('H[i][0]', H[i][0]);
         let beta = {
             moisture: H[i][0],
             heat: T[i][0],
             heatMass: C[i][0]
         }
         for(var j = H[i].length - 2; j > 0; --j){
-            H[i][j] = moisture(H, C, T, i, j, beta, alpha);
-            T[i][j] = heat(H, C, T, i, j, beta, alpha);
-            C[i][j] = heatMass(H, C, T, i, j, beta, alpha);
+            // console.log(H[0][j]);
+            H[i][j] = moisture(H, C, T, i, j, beta, alpha, Math.abs(dh), Math.abs(dt));
+            T[i][j] = heat(H, C, T, i, j, beta, alpha, Math.abs(dh));
+            C[i][j] = heatMass(H, C, T, i, j, beta, alpha, Math.abs(dh), Math.abs(dt));
         }
     }
     return {H: H, T: T, C: C};
