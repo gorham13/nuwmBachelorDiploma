@@ -19,6 +19,8 @@ Vue.component('app', require('./components/App.vue'));
 Vue.component('moisture-transfer', require('./components/MoistureTransfer.vue'));
 Vue.component('heat-transfer', require('./components/HeatTransfer.vue'));
 Vue.component('heat-mass-transfer', require('./components/HeatMassTransfer.vue'));
+Vue.component('mass-without-temp', require('./components/MassWithoutTemp.vue'));
+Vue.component('moisture-without-temp', require('./components/MoistureWithoutTemp.vue'));
 
 
 const app = new Vue({

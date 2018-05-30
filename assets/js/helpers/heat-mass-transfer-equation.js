@@ -31,7 +31,7 @@ function c(a, b, h){
 }
 
 function f(C, T, i, j, h, tau){
-    return sigma/tau*C[i-1][j] + gamma*Cz + Dt*(T[i-1][j-1] - 2*T[i][j] + T[i][j+1])/(h*h);
+    return sigma/tau*C[i-1][j] + gamma*Cz + Dt*(T[i-1][j-1] - 2*T[i-1][j] + T[i][j+1])/(h*h);
 }
 
 function r_minus(Vx){

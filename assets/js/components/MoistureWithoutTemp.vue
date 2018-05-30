@@ -10,6 +10,7 @@ export default {
         return {
             dates: [],
             H: [],
+            H0: [],
             legend: []
         }
     },
@@ -19,17 +20,24 @@ export default {
             this.legend.push('day ' + this.$parent.moisture[0][i])
         }
         
-        for(var i = 1; i < this.$parent.moisture.length; ++i){
+        for(var i = 1; i < 4; ++i){
             this.H.push([]);
             for(var j = 0; j < this.$parent.moisture[i].length; ++j){
                 this.H[i - 1].push(this.$parent.moisture[i][j]);
             }
         }
+
+        for(var i = 1; i < 4; ++i){
+            this.H0.push([]);
+            for(var j = 0; j < this.$parent.moistureWithoutTemp[i].length; ++j){
+                this.H0[i - 1].push(this.$parent.moistureWithoutTemp[i][j]);
+            }
+        }
     },
     mounted(){
         var dom = this.$refs.container;
-                var myChart = echarts.init(dom);
-                var app = {};
+        var myChart = echarts.init(dom);
+        var app = {};
         var option = null;
             option = {
                 title: {
@@ -81,14 +89,17 @@ export default {
           tmpArr.push({
             name:'name'+i,
             type:'line',
-            // stack: 'stack',
-            // label: {
-            //   normal: {
-            //     show: true,
-            //   }
-            // },
-            // areaStyle: {normal: {}},
-            data:this.H[i]
+            data:this.H[i],
+            color: 'black'
+          })
+        }
+        for(var i in this.H0)
+        {
+          tmpArr.push({
+            name:'name'+i,
+            type:'line',
+            data:this.H0[i],
+            color: 'red'
           })
         }
         return tmpArr;

@@ -377,33 +377,6 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -510,159 +483,34 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
 /* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-    mu: function mu(h, H1, H0) {
-        var a = 1;
-        var ro = 1000;
-        var g = 9.8;
-        return a * ro * g * (1 - 2 * h / (H1 - H0));
-    },
-    k: function k(H, C, T) {
-        return (kct(C, T) + kch(C, H)) / 2;
-    },
-    nu: function nu(C) {
-        var ro = 1000000;
-        return 2.8 * Math.pow(10, -5) + C / ro;
-    },
-    nextAlpha: function nextAlpha(prevAlpha, a, b, c) {
-        return b / (c - prevAlpha * a);
-    },
-    nextBeta: function nextBeta(prevBeta, alpha, a, c, f) {
-        return (a * prevBeta + f) / (c - alpha * a);
-    }
-});
-
-function kct(c, T) {
-    return kc(c) * kt(T) / k0;
-}
-function kch(c, h) {
-    return kc(c) + kh(h);
-}
-
-function kc(c) {
-    return (0.0002 * Math.pow(c, 6) - 0.0088 * Math.pow(c, 5) + 0.162 * Math.pow(c, 4) - 1.3194 * Math.pow(c, 3) + 3.9229 * Math.pow(c, 2) + 0.0223 * c) / Cz + 18.187;
-}
-function kh() {
-    var ro = 1000;
-    return 1 / (1 + Math.pow(ro, 2));
-}
-function kt(T) {
-    return 0.014151 * Math.pow(T, 5) - 0.026097 * Math.pow(T, 4) + 0.010819 * Math.pow(T, 3) + 0.012844 * Math.pow(T, 2) + 90.010404 * T + 0.0030925;
-}
-
-var Cz = 350;
-var k0 = 1;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(26);
-
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(11);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(11);
-  }
-  return adapter;
-}
-
-var defaults = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  /**
-   * A timeout in milliseconds to abort a request. If set to 0 (default) a
-   * timeout is not created.
-   */
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -744,7 +592,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -970,6 +818,158 @@ function applyToTag (styleElement, obj) {
   }
 }
 
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+    mu: function mu(h, H1, H0) {
+        var a = 1;
+        var ro = 1000;
+        var g = 9.8;
+        return a * ro * g * (1 - 2 * h / (H1 - H0));
+    },
+    k: function k(H, C, T) {
+        return (kct(C, T) + kch(C, H)) / 2;
+    },
+    nu: function nu(C) {
+        var ro = 1000000;
+        return 2.8 * Math.pow(10, -5) + C / ro;
+    },
+    nextAlpha: function nextAlpha(prevAlpha, a, b, c) {
+        return b / (c - prevAlpha * a);
+    },
+    nextBeta: function nextBeta(prevBeta, alpha, a, c, f) {
+        return (a * prevBeta + f) / (c - alpha * a);
+    }
+});
+
+function kct(c, T) {
+    return kc(c) * kt(T) / k0;
+}
+function kch(c, h) {
+    return kc(c) + kh(h);
+}
+
+function kc(c) {
+    return (0.0002 * Math.pow(c, 6) - 0.0088 * Math.pow(c, 5) + 0.162 * Math.pow(c, 4) - 1.3194 * Math.pow(c, 3) + 3.9229 * Math.pow(c, 2) + 0.0223 * c) / Cz + 18.187;
+}
+function kh() {
+    var ro = 1000;
+    return 1 / (1 + Math.pow(ro, 2));
+}
+function kt(T) {
+    return 0.014151 * Math.pow(T, 5) - 0.026097 * Math.pow(T, 4) + 0.010819 * Math.pow(T, 3) + 0.012844 * Math.pow(T, 2) + 90.010404 * T + 0.0030925;
+}
+
+var Cz = 350;
+var k0 = 1;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(0);
+var normalizeHeaderName = __webpack_require__(26);
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(11);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(11);
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ }),
 /* 7 */
@@ -3489,7 +3489,7 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
 /***/ }),
 /* 8 */
@@ -14326,7 +14326,7 @@ module.exports = Cancel;
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = filteringSpeed;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_general_functions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_general_functions__ = __webpack_require__(5);
 
 
 function filteringSpeed(H, C, T, i, j, h) {
@@ -14352,7 +14352,7 @@ var h = 0.1;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
-module.exports = __webpack_require__(67);
+module.exports = __webpack_require__(77);
 
 
 /***/ }),
@@ -14380,6 +14380,8 @@ Vue.component('app', __webpack_require__(44));
 Vue.component('moisture-transfer', __webpack_require__(51));
 Vue.component('heat-transfer', __webpack_require__(57));
 Vue.component('heat-mass-transfer', __webpack_require__(62));
+Vue.component('mass-without-temp', __webpack_require__(67));
+Vue.component('moisture-without-temp', __webpack_require__(72));
 
 var app = new Vue({
   el: '#app'
@@ -31535,7 +31537,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(20)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(20)(module)))
 
 /***/ }),
 /* 20 */
@@ -35481,7 +35483,7 @@ module.exports = __webpack_require__(23);
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(9);
 var Axios = __webpack_require__(25);
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(6);
 
 /**
  * Create an instance of Axios
@@ -35564,7 +35566,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(6);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(34);
 var dispatchRequest = __webpack_require__(35);
@@ -36103,7 +36105,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(36);
 var isCancel = __webpack_require__(13);
-var defaults = __webpack_require__(4);
+var defaults = __webpack_require__(6);
 var isAbsoluteURL = __webpack_require__(37);
 var combineURLs = __webpack_require__(38);
 
@@ -47317,7 +47319,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(42).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(42).setImmediate))
 
 /***/ }),
 /* 42 */
@@ -47384,7 +47386,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 43 */
@@ -47577,14 +47579,14 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(10)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(10)))
 
 /***/ }),
 /* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(45)
 /* template */
@@ -47766,6 +47768,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -47774,11 +47815,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             moisture: [],
             heat: [],
             heatMass: [],
+            moistureWithoutTemp: [],
+            massWithoutTemp: [],
             T: 360,
             dt: 30,
             h1: 0.5,
             h2: 1.5,
-            t1: 10,
+            t1: 11,
             t2: 5,
             c1: 20,
             c2: 5,
@@ -47803,6 +47846,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.moisture = _res.H;
                 _this.heat = _res.T;
                 _this.heatMass = _res.C;
+                _this.moistureWithoutTemp = _res.H0;
+                _this.massWithoutTemp = _res.C0;
             });
         }
     }
@@ -47825,15 +47870,21 @@ function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
     var H = [[]];
     var T = [[]];
     var C = [[]];
+    var H0 = [[]];
+    var T0 = [[]];
+    var C0 = [[]];
 
     for (var j = 0; j <= Td / dt; ++j) {
-        H[0][j] = j * dt;
-        T[0][j] = j * dt;
-        C[0][j] = j * dt;
+        H[0][j] = Math.pow(10, -5); //0.02*j;//Math.exp(-3*j*dt);
+        T[0][j] = j * dt / 45;
+        C[0][j] = j * dt / 45;
+        H0[0][j] = Math.pow(10, -5); //0.02*j;//Math.exp(-3*j*dt);
+        T0[0][j] = j * dt / 45;
+        C0[0][j] = j * dt / 45;
     }
     var dh = (h2 - h1) / n;
     var dt1 = (t2 - t1) / n;
-    console.log('t1', t1, 't2', t2, 'dt', dt1);
+    // console.log('t1', t1, 't2', t2, 'dt', dt1);
     var dc = (c2 - c1) / n;
     for (var i = 1; i <= n; ++i) {
         H.push([]);
@@ -47841,12 +47892,24 @@ function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
         H[i][0] = h1 * 1 + i * dh;
 
         T.push([]);
-        T[i][j - 1] = t1 * 1 + i * dt1;
+        T[i][j - 1] = t1 * 1 + i * dt1 - dt / 45;;
         T[i][0] = t1 * 1 + i * dt1;
 
         C.push([]);
-        C[i][j - 1] = c1 * 1 + i * dc;
+        C[i][j - 1] = c1 * 1 + i * dc - dt / 45;;
         C[i][0] = c1 * 1 + i * dc;
+
+        H0.push([]);
+        H0[i][j - 1] = h1 * 1 + i * dh - dt / 45;
+        H0[i][0] = h1 * 1 + i * dh;
+
+        T0.push([]);
+        T0[i][j - 1] = t1 * 1 + i * dt1;
+        T0[i][0] = t1 * 1 + i * dt1;
+
+        C0.push([]);
+        C0[i][j - 1] = c1 * 1 + i * dc;
+        C0[i][0] = c1 * 1 + i * dc;
     }
     for (var i = 1; i <= n; ++i) {
         var alpha = {
@@ -47862,12 +47925,31 @@ function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
         };
         for (var j = H[i].length - 2; j > 0; --j) {
             // console.log(H[0][j]);
-            H[i][j] = Object(__WEBPACK_IMPORTED_MODULE_0__moisture_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha, Math.abs(dh), Math.abs(dt));
-            T[i][j] = Object(__WEBPACK_IMPORTED_MODULE_1__heat_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha, Math.abs(dh));
-            C[i][j] = Object(__WEBPACK_IMPORTED_MODULE_2__heat_mass_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha, Math.abs(dh), Math.abs(dt));
+            H[i][j] = Object(__WEBPACK_IMPORTED_MODULE_0__moisture_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha, dh, dt);
+            T[i][j] = Object(__WEBPACK_IMPORTED_MODULE_1__heat_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha, dh);
+            C[i][j] = Object(__WEBPACK_IMPORTED_MODULE_2__heat_mass_transfer_equation__["a" /* default */])(H, C, T, i, j, beta, alpha, dh, dt);
         }
     }
-    return { H: H, T: T, C: C };
+    for (var i = 1; i <= n; ++i) {
+        var _alpha = {
+            moisture: 0,
+            heat: 0,
+            heatMass: 0
+            // console.log('H', H);
+            // console.log('H[i][0]', H[i][0]);
+        };var _beta = {
+            moisture: H[i][0],
+            heat: T[i][0],
+            heatMass: C[i][0]
+        };
+        for (var j = H0[i].length - 2; j > 0; --j) {
+            // console.log(H[0][j]);
+            H0[i][j] = Object(__WEBPACK_IMPORTED_MODULE_0__moisture_transfer_equation__["a" /* default */])(H0, C0, T0, i, j, _beta, _alpha, dh, dt);
+            T0[i][j] = 0;
+            C0[i][j] = Object(__WEBPACK_IMPORTED_MODULE_2__heat_mass_transfer_equation__["a" /* default */])(H0, C0, T0, i, j, _beta, _alpha, dh, dt);
+        }
+    }
+    return { H: H, T: T, C: C, H0: H0, T0: T0, C0: C0 };
 };
 
 var eps = 0.5;
@@ -47884,7 +47966,7 @@ var T = 3;
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = nextH;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_functions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_functions__ = __webpack_require__(5);
 
 
 function nextH(H, C, T, i, j, beta, alpha, h, tau) {
@@ -47961,7 +48043,7 @@ var Cz = 350;
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = nextT;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_functions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_functions__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__ = __webpack_require__(15);
 
 
@@ -48023,7 +48105,7 @@ var Cn = 3 * Math.pow(10, 6); //4.2;
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = nextC;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_functions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_functions__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__ = __webpack_require__(15);
 
 
@@ -48058,7 +48140,7 @@ function c(a, b, h) {
 }
 
 function f(C, T, i, j, h, tau) {
-    return sigma / tau * C[i - 1][j] + gamma * Cz + Dt * (T[i - 1][j - 1] - 2 * T[i][j] + T[i][j + 1]) / (h * h);
+    return sigma / tau * C[i - 1][j] + gamma * Cz + Dt * (T[i - 1][j - 1] - 2 * T[i - 1][j] + T[i][j + 1]) / (h * h);
 }
 
 function r_minus(Vx) {
@@ -48465,7 +48547,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "container tab-pane", attrs: { id: "heat-mass" } },
+        { staticClass: "container tab-pane fade", attrs: { id: "heat-mass" } },
         [
           _c("br"),
           _vm._v(" "),
@@ -48491,6 +48573,114 @@ var render = function() {
                     })
                   )
                 })
+              )
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "container tab-pane fade",
+          attrs: { id: "moisture-without-temp" }
+        },
+        [
+          _c("br"),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row justify-content-center" },
+            [
+              _vm.moistureWithoutTemp.length
+                ? _c("moisture-without-temp")
+                : _vm._e()
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("div", { staticClass: "table-responsive table-bordered" }, [
+              _c(
+                "table",
+                { staticClass: "table-sm" },
+                [
+                  _vm._l(3, function(item) {
+                    return _c(
+                      "tr",
+                      _vm._l(_vm.moistureWithoutTemp[item - 1], function(
+                        subitem
+                      ) {
+                        return _c("td", [
+                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                        ])
+                      })
+                    )
+                  }),
+                  _vm._v(" "),
+                  _vm._l(3, function(item) {
+                    return _c(
+                      "tr",
+                      _vm._l(_vm.moisture[item], function(subitem) {
+                        return _c("td", [
+                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                        ])
+                      })
+                    )
+                  })
+                ],
+                2
+              )
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "container tab-pane fade",
+          attrs: { id: "mass-without-temp" }
+        },
+        [
+          _c("br"),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "row justify-content-center" },
+            [_vm.massWithoutTemp.length ? _c("mass-without-temp") : _vm._e()],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("div", { staticClass: "table-responsive" }, [
+              _c(
+                "table",
+                { staticClass: "table-sm" },
+                [
+                  _vm._l(4, function(item) {
+                    return _c(
+                      "tr",
+                      _vm._l(_vm.massWithoutTemp[item - 1], function(subitem) {
+                        return _c("td", [
+                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                        ])
+                      })
+                    )
+                  }),
+                  _vm._v(" "),
+                  _vm._l(3, function(item) {
+                    return _c(
+                      "tr",
+                      _vm._l(_vm.heatMass[item], function(subitem) {
+                        return _c("td", [
+                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                        ])
+                      })
+                    )
+                  })
+                ],
+                2
               )
             ])
           ])
@@ -48550,6 +48740,28 @@ var staticRenderFns = [
             },
             [_vm._v("Heat-Mass Transfer")]
           )
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "nav-item" }, [
+          _c(
+            "a",
+            {
+              staticClass: "nav-link",
+              attrs: { "data-toggle": "tab", href: "#moisture-without-temp" }
+            },
+            [_vm._v("moisture-without-temp")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "nav-item" }, [
+          _c(
+            "a",
+            {
+              staticClass: "nav-link",
+              attrs: { "data-toggle": "tab", href: "#mass-without-temp" }
+            },
+            [_vm._v("mass-without-temp")]
+          )
         ])
       ]
     )
@@ -48573,7 +48785,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(52)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(55)
 /* template */
@@ -48626,7 +48838,7 @@ var content = __webpack_require__(53);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("46e3db9d", content, false, {});
+var update = __webpack_require__(4)("46e3db9d", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -48645,7 +48857,7 @@ if(false) {
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(false);
+exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
@@ -48725,7 +48937,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }
     },
     mounted: function mounted() {
-        console.log('mounted');
         var dom = this.$refs.container;
         var myChart = echarts.init(dom);
         var app = {};
@@ -48782,7 +48993,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     //     show: true,
                     //   }
                     // },
-                    areaStyle: { normal: {} },
+                    // areaStyle: {normal: {}},
                     data: this.H[i]
                 });
             }
@@ -48824,7 +49035,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(58)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(60)
 /* template */
@@ -48877,7 +49088,7 @@ var content = __webpack_require__(59);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("ff119b58", content, false, {});
+var update = __webpack_require__(4)("ff119b58", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -48896,7 +49107,7 @@ if(false) {
 /* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(false);
+exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
@@ -49000,7 +49211,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     //     show: true,
                     //   }
                     // },
-                    areaStyle: { normal: {} },
+                    // areaStyle: {normal: {}},
                     data: this.T[i]
                 });
             }
@@ -49042,7 +49253,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(63)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(65)
 /* template */
@@ -49095,7 +49306,7 @@ var content = __webpack_require__(64);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(6)("faa0c5d0", content, false, {});
+var update = __webpack_require__(4)("faa0c5d0", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49114,7 +49325,7 @@ if(false) {
 /* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(false);
+exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
@@ -49218,7 +49429,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     //     show: true,
                     //   }
                     // },
-                    areaStyle: { normal: {} },
+                    // areaStyle: {normal: {}},
                     data: this.C[i]
                 });
             }
@@ -49253,6 +49464,462 @@ if (false) {
 
 /***/ }),
 /* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(68)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(70)
+/* template */
+var __vue_template__ = __webpack_require__(71)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-10810eaa"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets\\js\\components\\MassWithoutTemp.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-10810eaa", Component.options)
+  } else {
+    hotAPI.reload("data-v-10810eaa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(69);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("78308967", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-10810eaa\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MassWithoutTemp.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-10810eaa\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MassWithoutTemp.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nh1[data-v-10810eaa], h2[data-v-10810eaa] {\r\n  font-weight: normal;\n}\nul[data-v-10810eaa] {\r\n  list-style-type: none;\r\n  padding: 0;\n}\nli[data-v-10810eaa] {\r\n  display: inline-block;\r\n  margin: 0 10px;\n}\na[data-v-10810eaa] {\r\n  color: #42b983;\n}\n.chart-wh[data-v-10810eaa]{\r\n    height: 900px;\r\n    width: 80vw;\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['data'],
+    data: function data() {
+        return {
+            dates: [],
+            C: [],
+            C0: [],
+            legend: []
+        };
+    },
+    created: function created() {
+        for (var i in this.$parent.heatMass[0]) {
+            this.dates.push(this.$parent.heatMass[0][i]);
+            this.legend.push('day ' + this.$parent.heatMass[0][i]);
+        }
+
+        for (var i = 1; i < 4; ++i) {
+            this.C.push([]);
+            for (var j = 0; j < this.$parent.heatMass[i].length; ++j) {
+                this.C[i - 1].push(this.$parent.heatMass[i][j]);
+            }
+        }
+
+        for (var i = 1; i < 4; ++i) {
+            this.C0.push([]);
+            for (var j = 0; j < this.$parent.massWithoutTemp[i].length; ++j) {
+                this.C0[i - 1].push(this.$parent.massWithoutTemp[i][j]);
+            }
+        }
+    },
+    mounted: function mounted() {
+        var dom = this.$refs.container;
+        var myChart = echarts.init(dom);
+        var app = {};
+        var option = null;
+        option = {
+            title: {
+                text: 'Mass Transfer Witout Temp'
+            },
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: {
+                data: this.legend
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: this.dates
+            }],
+            yAxis: [{
+                type: 'value'
+            }],
+            series: this.getChartData()
+
+        };
+        ;
+        if (option && (typeof option === 'undefined' ? 'undefined' : _typeof(option)) === "object") {
+            myChart.setOption(option, true);
+        }
+    },
+
+    methods: {
+        getChartData: function getChartData() {
+            var tmpArr = [];
+            for (var i in this.C) {
+                tmpArr.push({
+                    name: 'name' + i,
+                    type: 'line',
+                    smooth: true,
+                    data: this.C[i],
+                    color: 'black'
+                });
+            }
+            for (var i in this.C0) {
+                tmpArr.push({
+                    name: 'name' + i,
+                    type: 'line',
+                    smooth: true,
+                    data: this.C0[i],
+                    color: 'red'
+                });
+            }
+            return tmpArr;
+        }
+    }
+});
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", {
+    ref: "container",
+    staticStyle: { height: "80vh", width: "80vw" },
+    attrs: { calss: "chart-wh" }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-10810eaa", module.exports)
+  }
+}
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(73)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(75)
+/* template */
+var __vue_template__ = __webpack_require__(76)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-077a0a5e"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets\\js\\components\\MoistureWithoutTemp.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-077a0a5e", Component.options)
+  } else {
+    hotAPI.reload("data-v-077a0a5e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(74);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("1cef134c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-077a0a5e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MoistureWithoutTemp.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-077a0a5e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MoistureWithoutTemp.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nh1[data-v-077a0a5e], h2[data-v-077a0a5e] {\r\n  font-weight: normal;\n}\nul[data-v-077a0a5e] {\r\n  list-style-type: none;\r\n  padding: 0;\n}\nli[data-v-077a0a5e] {\r\n  display: inline-block;\r\n  margin: 0 10px;\n}\na[data-v-077a0a5e] {\r\n  color: #42b983;\n}\n.chart-wh[data-v-077a0a5e]{\r\n    height: 900px;\r\n    width: 80vw;\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['data'],
+    data: function data() {
+        return {
+            dates: [],
+            H: [],
+            H0: [],
+            legend: []
+        };
+    },
+    created: function created() {
+        for (var i in this.$parent.moisture[0]) {
+            this.dates.push(this.$parent.moisture[0][i]);
+            this.legend.push('day ' + this.$parent.moisture[0][i]);
+        }
+
+        for (var i = 1; i < 4; ++i) {
+            this.H.push([]);
+            for (var j = 0; j < this.$parent.moisture[i].length; ++j) {
+                this.H[i - 1].push(this.$parent.moisture[i][j]);
+            }
+        }
+
+        for (var i = 1; i < 4; ++i) {
+            this.H0.push([]);
+            for (var j = 0; j < this.$parent.moistureWithoutTemp[i].length; ++j) {
+                this.H0[i - 1].push(this.$parent.moistureWithoutTemp[i][j]);
+            }
+        }
+    },
+    mounted: function mounted() {
+        var dom = this.$refs.container;
+        var myChart = echarts.init(dom);
+        var app = {};
+        var option = null;
+        option = {
+            title: {
+                text: 'Moisture Transfer'
+            },
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: {
+                data: this.legend
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: this.dates
+            }],
+            yAxis: [{
+                type: 'value'
+            }],
+            series: this.getChartData()
+
+        };
+        ;
+        if (option && (typeof option === 'undefined' ? 'undefined' : _typeof(option)) === "object") {
+            myChart.setOption(option, true);
+        }
+    },
+
+    methods: {
+        getChartData: function getChartData() {
+            var tmpArr = [];
+            for (var i in this.H) {
+                tmpArr.push({
+                    name: 'name' + i,
+                    type: 'line',
+                    data: this.H[i],
+                    color: 'black'
+                });
+            }
+            for (var i in this.H0) {
+                tmpArr.push({
+                    name: 'name' + i,
+                    type: 'line',
+                    data: this.H0[i],
+                    color: 'red'
+                });
+            }
+            return tmpArr;
+        }
+    }
+});
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", {
+    ref: "container",
+    staticStyle: { height: "80vh", width: "80vw" },
+    attrs: { calss: "chart-wh" }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-077a0a5e", module.exports)
+  }
+}
+
+/***/ }),
+/* 77 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

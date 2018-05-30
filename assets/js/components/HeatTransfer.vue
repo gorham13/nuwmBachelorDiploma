@@ -88,7 +88,7 @@ export default {
             //     show: true,
             //   }
             // },
-            areaStyle: {normal: {}},
+            // areaStyle: {normal: {}},
             data:this.T[i]
           })
         }

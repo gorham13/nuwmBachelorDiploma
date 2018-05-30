@@ -9,31 +9,39 @@ export default {
     data () {
         return {
             dates: [],
-            H: [],
+            C: [],
+            C0: [],
             legend: []
         }
     },
     created(){
-        for(var i in this.$parent.moisture[0]){
-            this.dates.push(this.$parent.moisture[0][i]);
-            this.legend.push('day ' + this.$parent.moisture[0][i])
+        for(var i in this.$parent.heatMass[0]){
+            this.dates.push(this.$parent.heatMass[0][i]);
+            this.legend.push('day ' + this.$parent.heatMass[0][i])
         }
         
-        for(var i = 1; i < this.$parent.moisture.length; ++i){
-            this.H.push([]);
-            for(var j = 0; j < this.$parent.moisture[i].length; ++j){
-                this.H[i - 1].push(this.$parent.moisture[i][j]);
+        for(var i = 1; i < 4; ++i){
+            this.C.push([]);
+            for(var j = 0; j < this.$parent.heatMass[i].length; ++j){
+                this.C[i - 1].push(this.$parent.heatMass[i][j]);
+            }
+        }
+
+        for(var i = 1; i < 4; ++i){
+            this.C0.push([]);
+            for(var j = 0; j < this.$parent.massWithoutTemp[i].length; ++j){
+                this.C0[i - 1].push(this.$parent.massWithoutTemp[i][j]);
             }
         }
     },
     mounted(){
         var dom = this.$refs.container;
-                var myChart = echarts.init(dom);
-                var app = {};
+        var myChart = echarts.init(dom);
+        var app = {};
         var option = null;
             option = {
                 title: {
-                    text: 'Moisture Transfer'
+                    text: 'Mass Transfer Witout Temp'
                 },
                 tooltip : {
                     trigger: 'axis',
@@ -76,19 +84,24 @@ export default {
     methods: {
       getChartData(){
         let tmpArr = [];
-        for(var i in this.H)
+        for(var i in this.C)
         {
           tmpArr.push({
             name:'name'+i,
             type:'line',
-            // stack: 'stack',
-            // label: {
-            //   normal: {
-            //     show: true,
-            //   }
-            // },
-            // areaStyle: {normal: {}},
-            data:this.H[i]
+            smooth: true,
+            data:this.C[i],
+            color: 'black'
+          })
+        }
+        for(var i in this.C0)
+        {
+          tmpArr.push({
+            name:'name'+i,
+            type:'line',
+            smooth: true,
+            data:this.C0[i],
+            color: 'red'
           })
         }
         return tmpArr;

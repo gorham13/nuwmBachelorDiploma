@@ -28,8 +28,8 @@ export default {
     },
     mounted(){
         var dom = this.$refs.container;
-                var myChart = echarts.init(dom);
-                var app = {};
+        var myChart = echarts.init(dom);
+        var app = {};
         var option = null;
             option = {
                 title: {
@@ -88,7 +88,7 @@ export default {
             //     show: true,
             //   }
             // },
-            areaStyle: {normal: {}},
+            // areaStyle: {normal: {}},
             data:this.C[i]
           })
         }
