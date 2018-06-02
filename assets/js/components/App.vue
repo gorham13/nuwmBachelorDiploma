@@ -91,17 +91,32 @@
                 </div>
             </div>
             <div id="moisture" class="container tab-pane fade"><br>
-                <div class="row justify-content-center">
-                    <moisture-transfer v-if="moisture.length"></moisture-transfer>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#with-date">By Days</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#with-depth">By Depth</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="with-date" class="container tab-pane active"><br>
+                        <div class="row justify-content-center">
+                            <moisture-transfer v-if="moisture.length"></moisture-transfer>
+                        </div>
+                    </div>
+                    <div id="with-depth" class="container tab-pane fade"><br>
+                        <div class="row justify-content-center">
+                            <moisture-transfer1 v-if="moisture.length"></moisture-transfer1>
+                        </div>
+                    </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="table-responsive table-bordered">
-                        <table class="table-sm">
-                            <tr v-for="item in moisture">
-                                <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
-                            </tr>
-                        </table>
-                    </div>
+                    <table class="table-sm">
+                        <tr v-for="item in moisture">
+                            <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div id="heat" class="container tab-pane fade"><br>
@@ -137,7 +152,7 @@
                     <moisture-without-temp v-if="moistureWithoutTemp.length"></moisture-without-temp>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="table-responsive table-bordered">
+                    <div class="table table-bordered">
                         <table class="table-sm">
                             <tr v-for="item in 3">
                                 <td v-for="subitem in moistureWithoutTemp[item - 1]">{{parseFloat(subitem).toFixed(6)}}</td>

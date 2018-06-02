@@ -8,42 +8,32 @@ export default {
     props:['data'],
     data () {
         return {
-            dates: [],
+            h: [],
             H: [],
-            H0: [],
             legend: []
         }
     },
     created(){
-        let day = 0;
-        for(var j = 1; j < this.$parent.moisture[0].length - 1; ++j){
-            day += this.$parent.dt;
-            this.dates.push('day ' + day);
-            // this.legend.push('day ' + day);
+        for(var i = 1; i < this.$parent.moisture.length; ++i){
+            console.log(this.$parent.moisture.length);
+            this.h.push(this.$parent.moisture[i][0] + 'm');
+            this.legend.push(this.$parent.moisture[i][0] + 'm');
         }
-        
-        for(var i = 1; i < 4; ++i){
+        for(var i = 1; i < this.$parent.moisture[0].length; ++i){
             this.H.push([]);
-            for(var j = 1; j < this.$parent.moisture[i].length - 1; ++j){
-                this.H[i - 1].push(this.$parent.moisture[i][j]);
-            }
-        }
-
-        for(var i = 1; i < 4; ++i){
-            this.H0.push([]);
-            for(var j = 1; j < this.$parent.moistureWithoutTemp[i].length - 1; ++j){
-                this.H0[i - 1].push(this.$parent.moistureWithoutTemp[i][j]);
+            for(var j = 1; j < this.$parent.moisture.length; ++j){
+                this.H[i - 1].push(this.$parent.moisture[j][i]);
             }
         }
     },
     mounted(){
         var dom = this.$refs.container;
-        var myChart = echarts.init(dom);
-        var app = {};
+                var myChart = echarts.init(dom);
+                var app = {};
         var option = null;
             option = {
                 title: {
-                    text: 'Сomparison Moisture Transfer with and without Temperature'
+                    text: 'Moisture Transfer'
                 },
                 tooltip : {
                     trigger: 'axis',
@@ -67,7 +57,7 @@ export default {
                     {
                         type : 'category',
                         boundaryGap : false,
-                        data : this.dates
+                        data : this.h
                     }
                 ],
                 yAxis : [
@@ -89,19 +79,16 @@ export default {
         for(var i in this.H)
         {
           tmpArr.push({
-            name:'With T',
+            name:'name'+i,
             type:'line',
-            data:this.H[i],
-            color: '#404040'
-          })
-        }
-        for(var i in this.H0)
-        {
-          tmpArr.push({
-            name:'Without T',
-            type:'line',
-            data:this.H0[i],
-            color: '#ff4d4d'
+            // stack: 'stack',
+            // label: {
+            //   normal: {
+            //     show: true,
+            //   }
+            // },
+            // areaStyle: {normal: {}},
+            data:this.H[i]
           })
         }
         return tmpArr;

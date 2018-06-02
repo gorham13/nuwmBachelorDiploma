@@ -14378,6 +14378,7 @@ window.Vue = __webpack_require__(41);
 
 Vue.component('app', __webpack_require__(44));
 Vue.component('moisture-transfer', __webpack_require__(51));
+Vue.component('moisture-transfer1', __webpack_require__(81));
 Vue.component('heat-transfer', __webpack_require__(57));
 Vue.component('heat-mass-transfer', __webpack_require__(62));
 Vue.component('mass-without-temp', __webpack_require__(67));
@@ -47807,6 +47808,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -47873,20 +47889,26 @@ function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
     var H0 = [[]];
     var T0 = [[]];
     var C0 = [[]];
+    var h22 = h1 - dt / 45;
+    var t22 = t1 - dt / 45;
+    var c22 = c1 - dt / 15;
 
-    for (var j = 0; j <= Td / dt; ++j) {
-        H[0][j] = Math.pow(10, -5); //0.02*j;//Math.exp(-3*j*dt);
-        T[0][j] = j * dt / 45;
-        C[0][j] = j * dt / 45;
-        H0[0][j] = Math.pow(10, -5); //0.02*j;//Math.exp(-3*j*dt);
-        T0[0][j] = j * dt / 45;
-        C0[0][j] = j * dt / 45;
+    for (var j = 0; j < Td / dt; ++j) {
+        H[0][j] = h1 * 1 - (h1 - h22) * j * dt / Td; //h2 - j*dt*(h2 - h1)/Td;//0.02*j;//Math.exp(-3*j*dt);
+        if (H[0][j] < 0) {
+            H[0][j] = 0;
+        }
+        T[0][j] = t1 * 1 - (t1 - t22) * j * dt / Td;
+        C[0][j] = c1 * 1 - (c1 - c22) * j * dt / Td;
+        H0[0][j] = h1 * 1 - (h1 - h22) * j * dt / Td;
+        T0[0][j] = t1 * 1 - (t1 - t22) * j * dt / Td;
+        C0[0][j] = c1 * 1 - (c1 - c22) * j * dt / Td;
     }
     var dh = (h2 - h1) / n;
     var dt1 = (t2 - t1) / n;
     // console.log('t1', t1, 't2', t2, 'dt', dt1);
     var dc = (c2 - c1) / n;
-    for (var i = 1; i <= n; ++i) {
+    for (var i = 0; i <= n; ++i) {
         H.push([]);
         H[i][j - 1] = h1 * 1 + i * dh - dt / 45;
         H[i][0] = h1 * 1 + i * dh;
@@ -47896,7 +47918,7 @@ function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
         T[i][0] = t1 * 1 + i * dt1;
 
         C.push([]);
-        C[i][j - 1] = c1 * 1 + i * dc - dt / 45;;
+        C[i][j - 1] = c1 * 1 + i * dc - dt / 15;
         C[i][0] = c1 * 1 + i * dc;
 
         H0.push([]);
@@ -47908,16 +47930,20 @@ function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
         T0[i][0] = t1 * 1 + i * dt1;
 
         C0.push([]);
-        C0[i][j - 1] = c1 * 1 + i * dc;
+        C0[i][j - 1] = c1 * 1 + i * dc - dt / 15;
         C0[i][0] = c1 * 1 + i * dc;
     }
+    H.splice(-1, 1);
+    H0.splice(-1, 1);
+    T.splice(-1, 1);
+    C.splice(-1, 1);
+    C0.splice(-1, 1);
     for (var i = 1; i <= n; ++i) {
         var alpha = {
             moisture: 0,
             heat: 0,
             heatMass: 0
             // console.log('H', H);
-            // console.log('H[i][0]', H[i][0]);
         };var beta = {
             moisture: H[i][0],
             heat: T[i][0],
@@ -48181,7 +48207,7 @@ var gamma = 0.0065;
 var sigma = 0.4;
 var lambda = 108;
 // let Cp = 2137;//Cp=4.2*10**6//4.2
-var Cn = Cn = 3 * Math.pow(10, 6); //4.2;
+var Cn = Cn = 4.2 * Math.pow(10, 6); //4.2;
 var Cz = 350;
 var Dt = 0.002;
 
@@ -48483,30 +48509,61 @@ var render = function() {
         [
           _c("br"),
           _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "row justify-content-center" },
-            [_vm.moisture.length ? _c("moisture-transfer") : _vm._e()],
-            1
-          ),
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "tab-content" }, [
+            _c(
+              "div",
+              {
+                staticClass: "container tab-pane active",
+                attrs: { id: "with-date" }
+              },
+              [
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "row justify-content-center" },
+                  [_vm.moisture.length ? _c("moisture-transfer") : _vm._e()],
+                  1
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "container tab-pane fade",
+                attrs: { id: "with-depth" }
+              },
+              [
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "row justify-content-center" },
+                  [_vm.moisture.length ? _c("moisture-transfer1") : _vm._e()],
+                  1
+                )
+              ]
+            )
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "table-responsive table-bordered" }, [
-              _c(
-                "table",
-                { staticClass: "table-sm" },
-                _vm._l(_vm.moisture, function(item) {
-                  return _c(
-                    "tr",
-                    _vm._l(item, function(subitem) {
-                      return _c("td", [
-                        _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                      ])
-                    })
-                  )
-                })
-              )
-            ])
+            _c(
+              "table",
+              { staticClass: "table-sm" },
+              _vm._l(_vm.moisture, function(item) {
+                return _c(
+                  "tr",
+                  _vm._l(item, function(subitem) {
+                    return _c("td", [
+                      _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                    ])
+                  })
+                )
+              })
+            )
           ])
         ]
       ),
@@ -48600,7 +48657,7 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "table-responsive table-bordered" }, [
+            _c("div", { staticClass: "table table-bordered" }, [
               _c(
                 "table",
                 { staticClass: "table-sm" },
@@ -48765,6 +48822,38 @@ var staticRenderFns = [
         ])
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "ul",
+      { staticClass: "nav nav-tabs", attrs: { role: "tablist" } },
+      [
+        _c("li", { staticClass: "nav-item" }, [
+          _c(
+            "a",
+            {
+              staticClass: "nav-link active",
+              attrs: { "data-toggle": "tab", href: "#with-date" }
+            },
+            [_vm._v("By Days")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "nav-item" }, [
+          _c(
+            "a",
+            {
+              staticClass: "nav-link",
+              attrs: { "data-toggle": "tab", href: "#with-depth" }
+            },
+            [_vm._v("By Depth")]
+          )
+        ])
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -48924,14 +49013,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
     },
     created: function created() {
-        for (var i in this.$parent.moisture[0]) {
-            this.dates.push(this.$parent.moisture[0][i]);
-            this.legend.push('day ' + this.$parent.moisture[0][i]);
+        var day = 0;
+        for (var j = 1; j < this.$parent.moisture[0].length; ++j) {
+            day += this.$parent.dt;
+            this.dates.push('day ' + day);
+            // this.legend.push('day ' + day);
         }
 
         for (var i = 1; i < this.$parent.moisture.length; ++i) {
             this.H.push([]);
-            for (var j = 0; j < this.$parent.moisture[i].length; ++j) {
+            for (var j = 1; j < this.$parent.moisture[i].length; ++j) {
                 this.H[i - 1].push(this.$parent.moisture[i][j]);
             }
         }
@@ -49141,14 +49232,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
     },
     created: function created() {
-        for (var i in this.$parent.heat[0]) {
-            this.dates.push(this.$parent.heat[0][i]);
-            this.legend.push('day ' + this.$parent.heat[0][i]);
+        var day = 0;
+        for (var j = 1; j < this.$parent.heat[0].length; ++j) {
+            day += this.$parent.dt;
+            this.dates.push('day ' + day);
+            // this.legend.push('day ' + day);
         }
 
         for (var i = 1; i < this.$parent.heat.length; ++i) {
             this.T.push([]);
-            for (var j = 0; j < this.$parent.heat[i].length; ++j) {
+            for (var j = 1; j < this.$parent.heat[i].length; ++j) {
                 this.T[i - 1].push(this.$parent.heat[i][j]);
             }
         }
@@ -49359,14 +49452,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
     },
     created: function created() {
-        for (var i in this.$parent.heatMass[0]) {
-            this.dates.push(this.$parent.heatMass[0][i]);
-            this.legend.push('day ' + this.$parent.heatMass[0][i]);
+        var day = 0;
+        for (var j = 1; j < this.$parent.heatMass[0].length; ++j) {
+            day += this.$parent.dt;
+            this.dates.push('day ' + day);
+            // this.legend.push('day ' + day);
         }
 
         for (var i = 1; i < this.$parent.heatMass.length; ++i) {
             this.C.push([]);
-            for (var j = 0; j < this.$parent.heatMass[i].length; ++j) {
+            for (var j = 1; j < this.$parent.heatMass[i].length; ++j) {
                 this.C[i - 1].push(this.$parent.heatMass[i][j]);
             }
         }
@@ -49578,21 +49673,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
     },
     created: function created() {
-        for (var i in this.$parent.heatMass[0]) {
-            this.dates.push(this.$parent.heatMass[0][i]);
-            this.legend.push('day ' + this.$parent.heatMass[0][i]);
+        var day = 0;
+        for (var j = 1; j < this.$parent.heatMass[0].length - 1; ++j) {
+            day += this.$parent.dt;
+            this.dates.push('day ' + day);
+            // this.legend.push('day ' + day);
         }
 
         for (var i = 1; i < 4; ++i) {
             this.C.push([]);
-            for (var j = 0; j < this.$parent.heatMass[i].length; ++j) {
+            for (var j = 1; j < this.$parent.heatMass[i].length - 1; ++j) {
                 this.C[i - 1].push(this.$parent.heatMass[i][j]);
             }
         }
 
         for (var i = 1; i < 4; ++i) {
             this.C0.push([]);
-            for (var j = 0; j < this.$parent.massWithoutTemp[i].length; ++j) {
+            for (var j = 1; j < this.$parent.massWithoutTemp[i].length - 1; ++j) {
                 this.C0[i - 1].push(this.$parent.massWithoutTemp[i][j]);
             }
         }
@@ -49604,7 +49701,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var option = null;
         option = {
             title: {
-                text: 'Mass Transfer Witout Temp'
+                text: 'Сomparison Mass Transfer With and Without Temperature'
             },
             tooltip: {
                 trigger: 'axis'
@@ -49646,20 +49743,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             var tmpArr = [];
             for (var i in this.C) {
                 tmpArr.push({
-                    name: 'name' + i,
+                    name: 'With T',
                     type: 'line',
-                    smooth: true,
                     data: this.C[i],
-                    color: 'black'
+                    color: '#404040'
                 });
             }
             for (var i in this.C0) {
                 tmpArr.push({
-                    name: 'name' + i,
+                    name: 'Without T',
                     type: 'line',
-                    smooth: true,
                     data: this.C0[i],
-                    color: 'red'
+                    color: '#ff4d4d'
                 });
             }
             return tmpArr;
@@ -49807,21 +49902,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         };
     },
     created: function created() {
-        for (var i in this.$parent.moisture[0]) {
-            this.dates.push(this.$parent.moisture[0][i]);
-            this.legend.push('day ' + this.$parent.moisture[0][i]);
+        var day = 0;
+        for (var j = 1; j < this.$parent.moisture[0].length - 1; ++j) {
+            day += this.$parent.dt;
+            this.dates.push('day ' + day);
+            // this.legend.push('day ' + day);
         }
 
         for (var i = 1; i < 4; ++i) {
             this.H.push([]);
-            for (var j = 0; j < this.$parent.moisture[i].length; ++j) {
+            for (var j = 1; j < this.$parent.moisture[i].length - 1; ++j) {
                 this.H[i - 1].push(this.$parent.moisture[i][j]);
             }
         }
 
         for (var i = 1; i < 4; ++i) {
             this.H0.push([]);
-            for (var j = 0; j < this.$parent.moistureWithoutTemp[i].length; ++j) {
+            for (var j = 1; j < this.$parent.moistureWithoutTemp[i].length - 1; ++j) {
                 this.H0[i - 1].push(this.$parent.moistureWithoutTemp[i][j]);
             }
         }
@@ -49833,7 +49930,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var option = null;
         option = {
             title: {
-                text: 'Moisture Transfer'
+                text: 'Сomparison Moisture Transfer with and without Temperature'
             },
             tooltip: {
                 trigger: 'axis'
@@ -49875,18 +49972,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             var tmpArr = [];
             for (var i in this.H) {
                 tmpArr.push({
-                    name: 'name' + i,
+                    name: 'With T',
                     type: 'line',
                     data: this.H[i],
-                    color: 'black'
+                    color: '#404040'
                 });
             }
             for (var i in this.H0) {
                 tmpArr.push({
-                    name: 'name' + i,
+                    name: 'Without T',
                     type: 'line',
                     data: this.H0[i],
-                    color: 'red'
+                    color: '#ff4d4d'
                 });
             }
             return tmpArr;
@@ -49923,6 +50020,226 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(82)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(84)
+/* template */
+var __vue_template__ = __webpack_require__(85)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-345b1e70"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets\\js\\components\\MoistureTransfer1.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-345b1e70", Component.options)
+  } else {
+    hotAPI.reload("data-v-345b1e70", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(83);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("06e7f955", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-345b1e70\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MoistureTransfer1.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-345b1e70\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MoistureTransfer1.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nh1[data-v-345b1e70], h2[data-v-345b1e70] {\r\n  font-weight: normal;\n}\nul[data-v-345b1e70] {\r\n  list-style-type: none;\r\n  padding: 0;\n}\nli[data-v-345b1e70] {\r\n  display: inline-block;\r\n  margin: 0 10px;\n}\na[data-v-345b1e70] {\r\n  color: #42b983;\n}\n.chart-wh[data-v-345b1e70]{\r\n    height: 900px;\r\n    width: 80vw;\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['data'],
+    data: function data() {
+        return {
+            h: [],
+            H: [],
+            legend: []
+        };
+    },
+    created: function created() {
+        for (var i = 1; i < this.$parent.moisture.length; ++i) {
+            console.log(this.$parent.moisture.length);
+            this.h.push(this.$parent.moisture[i][0] + 'm');
+            this.legend.push(this.$parent.moisture[i][0] + 'm');
+        }
+        for (var i = 1; i < this.$parent.moisture[0].length; ++i) {
+            this.H.push([]);
+            for (var j = 1; j < this.$parent.moisture.length; ++j) {
+                this.H[i - 1].push(this.$parent.moisture[j][i]);
+            }
+        }
+    },
+    mounted: function mounted() {
+        var dom = this.$refs.container;
+        var myChart = echarts.init(dom);
+        var app = {};
+        var option = null;
+        option = {
+            title: {
+                text: 'Moisture Transfer'
+            },
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: {
+                data: this.legend
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: this.h
+            }],
+            yAxis: [{
+                type: 'value'
+            }],
+            series: this.getChartData()
+
+        };
+        ;
+        if (option && (typeof option === 'undefined' ? 'undefined' : _typeof(option)) === "object") {
+            myChart.setOption(option, true);
+        }
+    },
+
+    methods: {
+        getChartData: function getChartData() {
+            var tmpArr = [];
+            for (var i in this.H) {
+                tmpArr.push({
+                    name: 'name' + i,
+                    type: 'line',
+                    // stack: 'stack',
+                    // label: {
+                    //   normal: {
+                    //     show: true,
+                    //   }
+                    // },
+                    // areaStyle: {normal: {}},
+                    data: this.H[i]
+                });
+            }
+            return tmpArr;
+        }
+    }
+});
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", {
+    ref: "container",
+    staticStyle: { height: "80vh", width: "80vw" },
+    attrs: { calss: "chart-wh" }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-345b1e70", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

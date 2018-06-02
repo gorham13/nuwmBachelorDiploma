@@ -15,21 +15,23 @@ export default {
         }
     },
     created(){
-        for(var i in this.$parent.heatMass[0]){
-            this.dates.push(this.$parent.heatMass[0][i]);
-            this.legend.push('day ' + this.$parent.heatMass[0][i])
+        let day = 0;
+        for(var j = 1; j < this.$parent.heatMass[0].length - 1; ++j){
+            day += this.$parent.dt;
+            this.dates.push('day ' + day);
+            // this.legend.push('day ' + day);
         }
         
         for(var i = 1; i < 4; ++i){
             this.C.push([]);
-            for(var j = 0; j < this.$parent.heatMass[i].length; ++j){
+            for(var j = 1; j < this.$parent.heatMass[i].length - 1; ++j){
                 this.C[i - 1].push(this.$parent.heatMass[i][j]);
             }
         }
 
         for(var i = 1; i < 4; ++i){
             this.C0.push([]);
-            for(var j = 0; j < this.$parent.massWithoutTemp[i].length; ++j){
+            for(var j = 1; j < this.$parent.massWithoutTemp[i].length - 1; ++j){
                 this.C0[i - 1].push(this.$parent.massWithoutTemp[i][j]);
             }
         }
@@ -41,7 +43,7 @@ export default {
         var option = null;
             option = {
                 title: {
-                    text: 'Mass Transfer Witout Temp'
+                    text: 'Сomparison Mass Transfer With and Without Temperature'
                 },
                 tooltip : {
                     trigger: 'axis',
@@ -87,21 +89,19 @@ export default {
         for(var i in this.C)
         {
           tmpArr.push({
-            name:'name'+i,
+            name:'With T',
             type:'line',
-            smooth: true,
             data:this.C[i],
-            color: 'black'
+            color: '#404040'
           })
         }
         for(var i in this.C0)
         {
           tmpArr.push({
-            name:'name'+i,
+            name:'Without T',
             type:'line',
-            smooth: true,
             data:this.C0[i],
-            color: 'red'
+            color: '#ff4d4d'
           })
         }
         return tmpArr;

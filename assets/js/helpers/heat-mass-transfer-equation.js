@@ -72,7 +72,7 @@ let gamma = 0.0065;
 let sigma = 0.4;
 let lambda = 108;
 // let Cp = 2137;//Cp=4.2*10**6//4.2
-let Cn = Cn=3*10**6; //4.2;
+let Cn = Cn=4.2*10**6; //4.2;
 let Cz = 350;
 let Dt = 0.002;
 

@@ -14,14 +14,16 @@ export default {
         }
     },
     created(){
-        for(var i in this.$parent.heatMass[0]){
-            this.dates.push(this.$parent.heatMass[0][i]);
-            this.legend.push('day ' + this.$parent.heatMass[0][i])
+        let day = 0;
+        for(var j = 1; j < this.$parent.heatMass[0].length; ++j){
+            day += this.$parent.dt;
+            this.dates.push('day ' + day);
+            // this.legend.push('day ' + day);
         }
         
         for(var i = 1; i < this.$parent.heatMass.length; ++i){
             this.C.push([]);
-            for(var j = 0; j < this.$parent.heatMass[i].length; ++j){
+            for(var j = 1; j < this.$parent.heatMass[i].length; ++j){
                 this.C[i - 1].push(this.$parent.heatMass[i][j]);
             }
         }
