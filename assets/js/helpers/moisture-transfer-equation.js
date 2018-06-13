@@ -3,17 +3,12 @@ import generalFunctions from './general-functions'
 export default function nextH(H, C, T, i, j, beta, alpha, h, tau) {
 
     let mu = generalFunctions.mu(h, H[i-1][j+1], H[i-1][j-1]);
-    // console.log('mu', mu);
+
     let _L = L(H, C, T, i, j);
     let _a = a(_L, h);
     let _L1 = L1(H, C, T, i, j);
     let _b = b(_L1, h);
     let _c = c(_a, _b, mu, tau);
-    // console.log('_L', _L);
-    // console.log('_a', _a);
-    // console.log('_L1',_L1);
-    // console.log('_b',_b);
-    // console.log('_c', _c);
     
     let _M = M(C, i, j);
     let _M1 = M1(C, i, j);
@@ -22,8 +17,8 @@ export default function nextH(H, C, T, i, j, beta, alpha, h, tau) {
 
     beta.moisture = generalFunctions.nextBeta(beta.moisture, alpha.moisture, _a, _c, _f);
     alpha.moisture = generalFunctions.nextAlpha(alpha.moisture, _a, _b, _c);
-    
-    return alpha.moisture*H[i][j + 1] + beta.moisture;  
+
+    return alpha.moisture*H[i][j + 1] + beta.moisture*1;  
     
 };
 
@@ -56,7 +51,7 @@ function L(H, C, T, i, j){
 }
 
 function L1(H, C, T, i, j){
-    return (generalFunctions.k(H[i][j+1], C[i][j+1], T[i-1][j]) + generalFunctions.k(H[i-1][j], C[i-1][j], T[i-1][j]));
+    return (generalFunctions.k(H[i-1][j+1], C[i-1][j+1], T[i-1][j]) + generalFunctions.k(H[i-1][j], C[i-1][j], T[i-1][j]));
 }
 
 function F(x){
@@ -66,7 +61,4 @@ function F(x){
 
 
 let eps = 0.5;
-let k0 = 1;
 let l = 5;
-let ro = 1000;
-let Cz = 350;

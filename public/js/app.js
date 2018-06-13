@@ -486,33 +486,6 @@ module.exports = function normalizeComponent (
 /* 2 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
 	Author Tobias Koppers @sokra
@@ -592,7 +565,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -820,6 +793,33 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -861,7 +861,7 @@ function kh() {
     return 1 / (1 + Math.pow(ro, 2));
 }
 function kt(T) {
-    return 0.014151 * Math.pow(T, 5) - 0.026097 * Math.pow(T, 4) + 0.010819 * Math.pow(T, 3) + 0.012844 * Math.pow(T, 2) + 90.010404 * T + 0.0030925;
+    return 0.014151 * Math.pow(T, 5) - 0.026097 * Math.pow(T, 4) + 0.010819 * Math.pow(T, 3) + 0.012844 * Math.pow(T, 2) + 0.010404 * T + 0.0030925;
 }
 
 var Cz = 350;
@@ -3489,7 +3489,7 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 8 */
@@ -14332,8 +14332,8 @@ module.exports = Cancel;
 function filteringSpeed(H, C, T, i, j, h) {
     var _Ki = Ki(H[i + 1][j], C[i][j], T[i][j], H[i][j - 1], C[i][j - 1], T[i][j - 1]);
 
-    //let Nui = Nui(Ci, Ci_1);
-    return _Ki * (H[i + 1][j + 1] - H[i + 1][j]) / h - _Ki * (H[i + 1][j] - H[i][j - 1]) / h - mu2 * (T[i + 1][j + 1] - T[i][j]) / h - Nui(C[i][j], C[i][j - 1]) * (C[i + 1][j + 1] - C[i][j]) / h - Nui(C[i][j], C[i][j - 1]) * (C[i][j] - C[i][j - 1]) / h;
+    var result = -(_Ki * (H[i + 1][j + 1] - H[i + 1][j]) / h - _Ki * (H[i + 1][j] - H[i][j - 1]) / h) + mu2 * (T[i + 1][j + 1] - T[i][j]) / h + Nui(C[i][j + 1], C[i][j]) * (C[i + 1][j + 1] - C[i][j]) / h - Nui(C[i][j], C[i][j - 1]) * (C[i][j] - C[i][j - 1]) / h;
+    return result;
 }
 
 function Ki(Hi, Ci, Ti, Hi_1, Ci_1, Ti_1) {
@@ -14345,14 +14345,13 @@ function Nui(Ci, Ci_1) {
 }
 
 var mu2 = 1;
-var h = 0.1;
 
 /***/ }),
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
-module.exports = __webpack_require__(77);
+module.exports = __webpack_require__(82);
 
 
 /***/ }),
@@ -14378,11 +14377,11 @@ window.Vue = __webpack_require__(41);
 
 Vue.component('app', __webpack_require__(44));
 Vue.component('moisture-transfer', __webpack_require__(51));
-Vue.component('moisture-transfer1', __webpack_require__(81));
-Vue.component('heat-transfer', __webpack_require__(57));
-Vue.component('heat-mass-transfer', __webpack_require__(62));
-Vue.component('mass-without-temp', __webpack_require__(67));
-Vue.component('moisture-without-temp', __webpack_require__(72));
+Vue.component('moisture-transfer1', __webpack_require__(57));
+Vue.component('heat-transfer', __webpack_require__(62));
+Vue.component('heat-mass-transfer', __webpack_require__(67));
+Vue.component('mass-without-temp', __webpack_require__(72));
+Vue.component('moisture-without-temp', __webpack_require__(77));
 
 var app = new Vue({
   el: '#app'
@@ -31538,7 +31537,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(20)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(20)(module)))
 
 /***/ }),
 /* 20 */
@@ -47320,7 +47319,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(42).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(42).setImmediate))
 
 /***/ }),
 /* 42 */
@@ -47387,7 +47386,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 43 */
@@ -47580,7 +47579,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(10)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(10)))
 
 /***/ }),
 /* 44 */
@@ -47815,14 +47814,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -47835,12 +47826,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             massWithoutTemp: [],
             T: 360,
             dt: 30,
-            h1: 0.5,
-            h2: 1.5,
+            h1: 7,
+            h2: 1,
             t1: 11,
-            t2: 5,
-            c1: 20,
-            c2: 5,
+            t2: 1,
+            c1: 15,
+            c2: 6,
             n: 5
         };
     },
@@ -47894,44 +47885,65 @@ function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
     var c22 = c1 - dt / 15;
 
     for (var j = 0; j < Td / dt; ++j) {
-        H[0][j] = h1 * 1 - (h1 - h22) * j * dt / Td; //h2 - j*dt*(h2 - h1)/Td;//0.02*j;//Math.exp(-3*j*dt);
+        H[0][j] = (h2 - h1) / Td * j * dt + h1 * 1; //h2 - j*dt*(h2 - h1)/Td;//0.02*j;//Math.exp(-3*j*dt);
         if (H[0][j] < 0) {
             H[0][j] = 0;
         }
-        T[0][j] = t1 * 1 - (t1 - t22) * j * dt / Td;
-        C[0][j] = c1 * 1 - (c1 - c22) * j * dt / Td;
-        H0[0][j] = h1 * 1 - (h1 - h22) * j * dt / Td;
-        T0[0][j] = t1 * 1 - (t1 - t22) * j * dt / Td;
-        C0[0][j] = c1 * 1 - (c1 - c22) * j * dt / Td;
+        T[0][j] = (t2 - t1) / Td * j * dt + t1 * 1; //t1*1 - (t1 - t22)*j*dt/Td;
+        C[0][j] = (c2 - c1) / Td * j * dt + c1 * 1; //c1*1 - (c1 - c22)*j*dt/Td;
+        if (C[0][j] < 0) {
+            C[0][j] = 0;
+        }
+        H0[0][j] = (h2 - h1) / Td * j * dt + h1 * 1;;
+        if (H0[0][j] < 0) {
+            H0[0][j] = 0;
+        }
+        T0[0][j] = 0; //(t2-t1)/Td*j*dt + t1*1;;
+        C0[0][j] = (c2 - c1) / Td * j * dt + c1 * 1;
+        if (C0[0][j] < 0) {
+            C0[0][j] = 0;
+        }
     }
-    var dh = (h2 - h1) / n;
-    var dt1 = (t2 - t1) / n;
+    var dh = Math.abs(h2 - h1) / n;
+    var dt1 = Math.abs(t2 - t1) / n;
     // console.log('t1', t1, 't2', t2, 'dt', dt1);
-    var dc = (c2 - c1) / n;
+    var dc = Math.abs(c2 - c1) / n;
     for (var i = 0; i <= n; ++i) {
         H.push([]);
-        H[i][j - 1] = h1 * 1 + i * dh - dt / 45;
-        H[i][0] = h1 * 1 + i * dh;
+        H[i][j - 1] = h2;
+        if (H[i][j - 1] < 0) {
+            H[i][j - 1] = 0;
+        }
+        H[i][0] = h1;
 
         T.push([]);
-        T[i][j - 1] = t1 * 1 + i * dt1 - dt / 45;;
-        T[i][0] = t1 * 1 + i * dt1;
+        T[i][j - 1] = t2;
+        T[i][0] = t1;
 
         C.push([]);
-        C[i][j - 1] = c1 * 1 + i * dc - dt / 15;
-        C[i][0] = c1 * 1 + i * dc;
+        C[i][j - 1] = c2;
+        if (C[i][j - 1] < 0) {
+            C[i][j - 1] = 0;
+        }
+        C[i][0] = c1;
 
         H0.push([]);
-        H0[i][j - 1] = h1 * 1 + i * dh - dt / 45;
-        H0[i][0] = h1 * 1 + i * dh;
+        H0[i][j - 1] = h2;
+        if (H0[i][j - 1] < 0) {
+            H0[i][j - 1] = 0;
+        }
+        H0[i][0] = h1;
 
         T0.push([]);
-        T0[i][j - 1] = t1 * 1 + i * dt1;
-        T0[i][0] = t1 * 1 + i * dt1;
+        T0[i][j - 1] = 0;
+        T0[i][0] = 0;
 
         C0.push([]);
-        C0[i][j - 1] = c1 * 1 + i * dc - dt / 15;
-        C0[i][0] = c1 * 1 + i * dc;
+        C0[i][j - 1] = c2;
+        if (C0[i][j - 1] < 0) {
+            C0[i][j - 1] = 0;
+        }
+        C0[i][0] = c1;
     }
     H.splice(-1, 1);
     H0.splice(-1, 1);
@@ -47998,17 +48010,12 @@ var T = 3;
 function nextH(H, C, T, i, j, beta, alpha, h, tau) {
 
     var mu = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].mu(h, H[i - 1][j + 1], H[i - 1][j - 1]);
-    // console.log('mu', mu);
+
     var _L = L(H, C, T, i, j);
     var _a = a(_L, h);
     var _L1 = L1(H, C, T, i, j);
     var _b = b(_L1, h);
     var _c = c(_a, _b, mu, tau);
-    // console.log('_L', _L);
-    // console.log('_a', _a);
-    // console.log('_L1',_L1);
-    // console.log('_b',_b);
-    // console.log('_c', _c);
 
     var _M = M(C, i, j);
     var _M1 = M1(C, i, j);
@@ -48018,7 +48025,7 @@ function nextH(H, C, T, i, j, beta, alpha, h, tau) {
     beta.moisture = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextBeta(beta.moisture, alpha.moisture, _a, _c, _f);
     alpha.moisture = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextAlpha(alpha.moisture, _a, _b, _c);
 
-    return alpha.moisture * H[i][j + 1] + beta.moisture;
+    return alpha.moisture * H[i][j + 1] + beta.moisture * 1;
 };
 
 function a(L, h) {
@@ -48050,7 +48057,7 @@ function L(H, C, T, i, j) {
 }
 
 function L1(H, C, T, i, j) {
-    return __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].k(H[i][j + 1], C[i][j + 1], T[i - 1][j]) + __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].k(H[i - 1][j], C[i - 1][j], T[i - 1][j]);
+    return __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].k(H[i - 1][j + 1], C[i - 1][j + 1], T[i - 1][j]) + __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].k(H[i - 1][j], C[i - 1][j], T[i - 1][j]);
 }
 
 function F(x) {
@@ -48058,10 +48065,7 @@ function F(x) {
 }
 
 var eps = 0.5;
-var k0 = 1;
 var l = 5;
-var ro = 1000;
-var Cz = 350;
 
 /***/ }),
 /* 48 */
@@ -48132,18 +48136,20 @@ var Cn = 3 * Math.pow(10, 6); //4.2;
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = nextC;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__general_functions__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation1__ = __webpack_require__(86);
 
 
 
 function nextC(H, C, T, i, j, beta, alpha, h, tau) {
-    var _Vx = Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__["a" /* default */])(H, C, T, i - 1, j, h);
-    var _d_i = d_i(C, T, H, i, j);
-    var _d_i1 = d_i1(C, T, H, i, j);
+
+    var _Vx = Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation1__["a" /* default */])(H, C, T, i - 1, j, h);
+
+    var _d_i = d_i(C, T, H, i, j, h);
+    var _d_i1 = d_i1(C, T, H, i, j, h);
 
     var _a = a(_Vx, _d_i, h);
     var _b = b(_Vx, _d_i1, h);
-    var _c = c(_a, _b, h);
+    var _c = c(_a, _b, tau);
 
     var _f = f(C, T, i, j, h, tau);
 
@@ -48161,8 +48167,8 @@ function b(Vx, d_i1, h) {
     return eta_2i(Vx, d_i1, h) * d_i1 / (h * h) + r_plus(Vx) / h;
 }
 
-function c(a, b, h) {
-    return a + b + Cn / (lambda * h);
+function c(a, b, tau) {
+    return a + b + gamma - sigma / tau; //Cn/(lambda*h);//
 }
 
 function f(C, T, i, j, h, tau) {
@@ -48192,22 +48198,22 @@ function eta_2i(Vx, d_i1, h) {
 function D(Vx) {
     var lambda = 1;
     var Dm = Math.pow(10, -6);
-    return Dm + lambda * Math.abs(Vx) ? Vx : 0;
+    return Dm + lambda * Math.abs(Vx);
 }
 
-function d_i(C, T, H, i, j) {
-    return 0.5 * (D(Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__["a" /* default */])(H, C, T, i - 1, j)) + D(Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__["a" /* default */])(H, C, T, i - 1, j - 1)));
+function d_i(C, T, H, i, j, h) {
+    return 0.5 * (D(Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation1__["a" /* default */])(H, C, T, i - 1, j, h)) + D(Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation1__["a" /* default */])(H, C, T, i - 1, j, h, 'minus')));
 }
 
-function d_i1(C, T, H, i, j) {
-    return 0.5 * (D(Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__["a" /* default */])(H, C, T, i - 1, j + 1)) + D(Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation__["a" /* default */])(H, C, T, i - 1, j)));
+function d_i1(C, T, H, i, j, h) {
+    return 0.5 * (D(Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation1__["a" /* default */])(H, C, T, i - 1, j, h, 'plus')) + D(Object(__WEBPACK_IMPORTED_MODULE_1__filtering_speed_equation1__["a" /* default */])(H, C, T, i - 1, j, h)));
 }
 
 var gamma = 0.0065;
 var sigma = 0.4;
 var lambda = 108;
 // let Cp = 2137;//Cp=4.2*10**6//4.2
-var Cn = Cn = 4.2 * Math.pow(10, 6); //4.2;
+// let Cn = 3*10**6; //4.2;
 var Cz = 350;
 var Dt = 0.002;
 
@@ -48223,285 +48229,281 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "tab-content" }, [
-      _c(
-        "div",
-        { staticClass: "container tab-pane active", attrs: { id: "home" } },
-        [
-          _c("br"),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-6" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "T" } }, [
-                  _vm._v("T (Period Of Time):")
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.T,
-                      expression: "T"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "number", id: "T" },
-                  domProps: { value: _vm.T },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.T = $event.target.value
-                    }
+      _c("div", { staticClass: "container tab-pane", attrs: { id: "home" } }, [
+        _c("br"),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "T" } }, [
+                _vm._v("T (Period Of Time):")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.T,
+                    expression: "T"
                   }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-6" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "dt" } }, [_vm._v("dt:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.dt,
-                      expression: "dt"
+                ],
+                staticClass: "form-control",
+                attrs: { type: "number", id: "T" },
+                domProps: { value: _vm.T },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
                     }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "number", id: "dt" },
-                  domProps: { value: _vm.dt },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.dt = $event.target.value
-                    }
+                    _vm.T = $event.target.value
                   }
-                })
-              ])
+                }
+              })
             ])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-6" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "h1" } }, [_vm._v("h1:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.h1,
-                      expression: "h1"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "number", id: "h1" },
-                  domProps: { value: _vm.h1 },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.h1 = $event.target.value
-                    }
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "dt" } }, [_vm._v("dt:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.dt,
+                    expression: "dt"
                   }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-6" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "h2" } }, [_vm._v("h2:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.h2,
-                      expression: "h2"
+                ],
+                staticClass: "form-control",
+                attrs: { type: "number", id: "dt" },
+                domProps: { value: _vm.dt },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
                     }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "number", id: "h2" },
-                  domProps: { value: _vm.h2 },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.h2 = $event.target.value
-                    }
+                    _vm.dt = $event.target.value
                   }
-                })
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-6" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "t1" } }, [_vm._v("t1:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.t1,
-                      expression: "t1"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "number", id: "t1" },
-                  domProps: { value: _vm.t1 },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.t1 = $event.target.value
-                    }
-                  }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-6" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "t2" } }, [_vm._v("t2:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.t2,
-                      expression: "t2"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "number", id: "t2" },
-                  domProps: { value: _vm.t2 },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.t2 = $event.target.value
-                    }
-                  }
-                })
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-6" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "c1" } }, [_vm._v("c1:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.c1,
-                      expression: "c1"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "number", id: "c1" },
-                  domProps: { value: _vm.c1 },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.c1 = $event.target.value
-                    }
-                  }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-6" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "c2" } }, [_vm._v("c2:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.c2,
-                      expression: "c2"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "number", id: "c2" },
-                  domProps: { value: _vm.c2 },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.c2 = $event.target.value
-                    }
-                  }
-                })
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-6" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("label", { attrs: { for: "n" } }, [_vm._v("n:")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.n,
-                      expression: "n"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "number", id: "n" },
-                  domProps: { value: _vm.n },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.n = $event.target.value
-                    }
-                  }
-                })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-6" }, [
-              _c(
-                "button",
-                { staticClass: "btn", on: { click: _vm.calculation } },
-                [_vm._v("Calculation")]
-              )
+                }
+              })
             ])
           ])
-        ]
-      ),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "h1" } }, [_vm._v("h1:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.h1,
+                    expression: "h1"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "number", id: "h1" },
+                domProps: { value: _vm.h1 },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.h1 = $event.target.value
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "h2" } }, [_vm._v("h2:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.h2,
+                    expression: "h2"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "number", id: "h2" },
+                domProps: { value: _vm.h2 },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.h2 = $event.target.value
+                  }
+                }
+              })
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "t1" } }, [_vm._v("t1:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.t1,
+                    expression: "t1"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "number", id: "t1" },
+                domProps: { value: _vm.t1 },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.t1 = $event.target.value
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "t2" } }, [_vm._v("t2:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.t2,
+                    expression: "t2"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "number", id: "t2" },
+                domProps: { value: _vm.t2 },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.t2 = $event.target.value
+                  }
+                }
+              })
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "c1" } }, [_vm._v("c1:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.c1,
+                    expression: "c1"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "number", id: "c1" },
+                domProps: { value: _vm.c1 },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.c1 = $event.target.value
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "c2" } }, [_vm._v("c2:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.c2,
+                    expression: "c2"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "number", id: "c2" },
+                domProps: { value: _vm.c2 },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.c2 = $event.target.value
+                  }
+                }
+              })
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "n" } }, [_vm._v("n:")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.n,
+                    expression: "n"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "number", id: "n" },
+                domProps: { value: _vm.n },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.n = $event.target.value
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-6" }, [
+            _c(
+              "button",
+              { staticClass: "btn", on: { click: _vm.calculation } },
+              [_vm._v("Calculation")]
+            )
+          ])
+        ])
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -48582,22 +48584,20 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "table-responsive" }, [
-              _c(
-                "table",
-                { staticClass: "table-sm" },
-                _vm._l(_vm.heat, function(item) {
-                  return _c(
-                    "tr",
-                    _vm._l(item, function(subitem) {
-                      return _c("td", [
-                        _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                      ])
-                    })
-                  )
-                })
-              )
-            ])
+            _c(
+              "table",
+              { staticClass: "table-sm" },
+              _vm._l(_vm.heat, function(item) {
+                return _c(
+                  "tr",
+                  _vm._l(item, function(subitem) {
+                    return _c("td", [
+                      _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                    ])
+                  })
+                )
+              })
+            )
           ])
         ]
       ),
@@ -48616,22 +48616,20 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "table-responsive" }, [
-              _c(
-                "table",
-                { staticClass: "table-sm" },
-                _vm._l(_vm.heatMass, function(item) {
-                  return _c(
-                    "tr",
-                    _vm._l(item, function(subitem) {
-                      return _c("td", [
-                        _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                      ])
-                    })
-                  )
-                })
-              )
-            ])
+            _c(
+              "table",
+              { staticClass: "table-sm" },
+              _vm._l(_vm.heatMass, function(item) {
+                return _c(
+                  "tr",
+                  _vm._l(item, function(subitem) {
+                    return _c("td", [
+                      _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                    ])
+                  })
+                )
+              })
+            )
           ])
         ]
       ),
@@ -48639,7 +48637,7 @@ var render = function() {
       _c(
         "div",
         {
-          staticClass: "container tab-pane fade",
+          staticClass: "container tab-pane active",
           attrs: { id: "moisture-without-temp" }
         },
         [
@@ -48657,38 +48655,36 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "table table-bordered" }, [
-              _c(
-                "table",
-                { staticClass: "table-sm" },
-                [
-                  _vm._l(3, function(item) {
-                    return _c(
-                      "tr",
-                      _vm._l(_vm.moistureWithoutTemp[item - 1], function(
-                        subitem
-                      ) {
-                        return _c("td", [
-                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                        ])
-                      })
-                    )
-                  }),
-                  _vm._v(" "),
-                  _vm._l(3, function(item) {
-                    return _c(
-                      "tr",
-                      _vm._l(_vm.moisture[item], function(subitem) {
-                        return _c("td", [
-                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                        ])
-                      })
-                    )
-                  })
-                ],
-                2
-              )
-            ])
+            _c(
+              "table",
+              { staticClass: "table-sm" },
+              [
+                _vm._l(3, function(item) {
+                  return _c(
+                    "tr",
+                    _vm._l(_vm.moistureWithoutTemp[item - 1], function(
+                      subitem
+                    ) {
+                      return _c("td", [
+                        _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                      ])
+                    })
+                  )
+                }),
+                _vm._v(" "),
+                _vm._l(3, function(item) {
+                  return _c(
+                    "tr",
+                    _vm._l(_vm.moisture[item], function(subitem) {
+                      return _c("td", [
+                        _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                      ])
+                    })
+                  )
+                })
+              ],
+              2
+            )
           ])
         ]
       ),
@@ -48710,36 +48706,34 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "row justify-content-center" }, [
-            _c("div", { staticClass: "table-responsive" }, [
-              _c(
-                "table",
-                { staticClass: "table-sm" },
-                [
-                  _vm._l(4, function(item) {
-                    return _c(
-                      "tr",
-                      _vm._l(_vm.massWithoutTemp[item - 1], function(subitem) {
-                        return _c("td", [
-                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                        ])
-                      })
-                    )
-                  }),
-                  _vm._v(" "),
-                  _vm._l(3, function(item) {
-                    return _c(
-                      "tr",
-                      _vm._l(_vm.heatMass[item], function(subitem) {
-                        return _c("td", [
-                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                        ])
-                      })
-                    )
-                  })
-                ],
-                2
-              )
-            ])
+            _c(
+              "table",
+              { staticClass: "table-sm" },
+              [
+                _vm._l(4, function(item) {
+                  return _c(
+                    "tr",
+                    _vm._l(_vm.massWithoutTemp[item - 1], function(subitem) {
+                      return _c("td", [
+                        _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                      ])
+                    })
+                  )
+                }),
+                _vm._v(" "),
+                _vm._l(3, function(item) {
+                  return _c(
+                    "tr",
+                    _vm._l(_vm.heatMass[item], function(subitem) {
+                      return _c("td", [
+                        _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                      ])
+                    })
+                  )
+                })
+              ],
+              2
+            )
           ])
         ]
       )
@@ -48759,7 +48753,7 @@ var staticRenderFns = [
           _c(
             "a",
             {
-              staticClass: "nav-link active",
+              staticClass: "nav-link ",
               attrs: { "data-toggle": "tab", href: "#home" }
             },
             [_vm._v("Home")]
@@ -48773,7 +48767,7 @@ var staticRenderFns = [
               staticClass: "nav-link",
               attrs: { "data-toggle": "tab", href: "#moisture" }
             },
-            [_vm._v("Moisture Tranfer")]
+            [_vm._v("Moisture Transfer")]
           )
         ]),
         _vm._v(" "),
@@ -48803,10 +48797,10 @@ var staticRenderFns = [
           _c(
             "a",
             {
-              staticClass: "nav-link",
+              staticClass: "nav-link active",
               attrs: { "data-toggle": "tab", href: "#moisture-without-temp" }
             },
-            [_vm._v("moisture-without-temp")]
+            [_vm._v("Moisture Compare")]
           )
         ]),
         _vm._v(" "),
@@ -48817,7 +48811,7 @@ var staticRenderFns = [
               staticClass: "nav-link",
               attrs: { "data-toggle": "tab", href: "#mass-without-temp" }
             },
-            [_vm._v("mass-without-temp")]
+            [_vm._v("Mass Compare")]
           )
         ])
       ]
@@ -48927,7 +48921,7 @@ var content = __webpack_require__(53);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(4)("46e3db9d", content, false, {});
+var update = __webpack_require__(3)("46e3db9d", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -48946,7 +48940,7 @@ if(false) {
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(3)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -49136,6 +49130,223 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
+var __vue_scopeId__ = "data-v-345b1e70"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets\\js\\components\\MoistureTransfer1.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-345b1e70", Component.options)
+  } else {
+    hotAPI.reload("data-v-345b1e70", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(59);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("06e7f955", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-345b1e70\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MoistureTransfer1.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-345b1e70\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MoistureTransfer1.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nh1[data-v-345b1e70], h2[data-v-345b1e70] {\r\n  font-weight: normal;\n}\nul[data-v-345b1e70] {\r\n  list-style-type: none;\r\n  padding: 0;\n}\nli[data-v-345b1e70] {\r\n  display: inline-block;\r\n  margin: 0 10px;\n}\na[data-v-345b1e70] {\r\n  color: #42b983;\n}\n.chart-wh[data-v-345b1e70]{\r\n    height: 900px;\r\n    width: 80vw;\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['data'],
+    data: function data() {
+        return {
+            h: [],
+            H: [],
+            legend: []
+        };
+    },
+    created: function created() {
+        for (var i = 1; i < this.$parent.moisture.length; ++i) {
+            console.log(this.$parent.moisture.length);
+            this.h.push(this.$parent.moisture[i][0] + 'm');
+            this.legend.push(this.$parent.moisture[i][0] + 'm');
+        }
+        for (var i = 1; i < this.$parent.moisture[0].length; ++i) {
+            this.H.push([]);
+            for (var j = 1; j < this.$parent.moisture.length; ++j) {
+                this.H[i - 1].push(this.$parent.moisture[j][i]);
+            }
+        }
+    },
+    mounted: function mounted() {
+        var dom = this.$refs.container;
+        var myChart = echarts.init(dom);
+        var app = {};
+        var option = null;
+        option = {
+            title: {
+                text: 'Moisture Transfer'
+            },
+            tooltip: {
+                trigger: 'axis'
+
+            },
+            legend: {
+                data: this.legend
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: this.h
+            }],
+            yAxis: [{
+                type: 'value'
+            }],
+            series: this.getChartData()
+
+        };
+        ;
+        if (option && (typeof option === 'undefined' ? 'undefined' : _typeof(option)) === "object") {
+            myChart.setOption(option, true);
+        }
+    },
+
+    methods: {
+        getChartData: function getChartData() {
+            var tmpArr = [];
+            for (var i in this.H) {
+                tmpArr.push({
+                    name: 'name' + i,
+                    type: 'line',
+                    // stack: 'stack',
+                    // label: {
+                    //   normal: {
+                    //     show: true,
+                    //   }
+                    // },
+                    // areaStyle: {normal: {}},
+                    data: this.H[i]
+                });
+            }
+            return tmpArr;
+        }
+    }
+});
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", {
+    ref: "container",
+    staticStyle: { height: "80vh", width: "80vw" },
+    attrs: { calss: "chart-wh" }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-345b1e70", module.exports)
+  }
+}
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(63)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(65)
+/* template */
+var __vue_template__ = __webpack_require__(66)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
 var __vue_scopeId__ = "data-v-9520d72e"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
@@ -49169,17 +49380,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 58 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(59);
+var content = __webpack_require__(64);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(4)("ff119b58", content, false, {});
+var update = __webpack_require__(3)("ff119b58", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49195,10 +49406,10 @@ if(false) {
 }
 
 /***/ }),
-/* 59 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(3)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -49209,7 +49420,7 @@ exports.push([module.i, "\nh1[data-v-9520d72e], h2[data-v-9520d72e] {\r\n  font-
 
 
 /***/ }),
-/* 60 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49281,6 +49492,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             yAxis: [{
                 type: 'value'
             }],
+
             series: this.getChartData()
 
         };
@@ -49297,7 +49509,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 tmpArr.push({
                     name: 'name' + i,
                     type: 'line',
-                    smooth: true,
+                    // smooth: true,
                     // stack: 'stack',
                     // label: {
                     //   normal: {
@@ -49314,7 +49526,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 61 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -49338,19 +49550,19 @@ if (false) {
 }
 
 /***/ }),
-/* 62 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(63)
+  __webpack_require__(68)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(65)
+var __vue_script__ = __webpack_require__(70)
 /* template */
-var __vue_template__ = __webpack_require__(66)
+var __vue_template__ = __webpack_require__(71)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -49389,17 +49601,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 63 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(64);
+var content = __webpack_require__(69);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(4)("faa0c5d0", content, false, {});
+var update = __webpack_require__(3)("faa0c5d0", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49415,10 +49627,10 @@ if(false) {
 }
 
 /***/ }),
-/* 64 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(3)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -49429,7 +49641,7 @@ exports.push([module.i, "\nh1[data-v-79b0fe7d], h2[data-v-79b0fe7d] {\r\n  font-
 
 
 /***/ }),
-/* 65 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49472,6 +49684,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var app = {};
         var option = null;
         option = {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: false
+                    }
+                }]
+            },
             title: {
                 text: 'Heat-Mass Transfer'
             },
@@ -49517,7 +49736,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 tmpArr.push({
                     name: 'name' + i,
                     type: 'line',
-                    smooth: true,
+                    // smooth: true,
                     // stack: 'stack',
                     // label: {
                     //   normal: {
@@ -49534,7 +49753,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 66 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -49558,19 +49777,19 @@ if (false) {
 }
 
 /***/ }),
-/* 67 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(68)
+  __webpack_require__(73)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(70)
+var __vue_script__ = __webpack_require__(75)
 /* template */
-var __vue_template__ = __webpack_require__(71)
+var __vue_template__ = __webpack_require__(76)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -49609,17 +49828,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 68 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(69);
+var content = __webpack_require__(74);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(4)("78308967", content, false, {});
+var update = __webpack_require__(3)("78308967", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49635,10 +49854,10 @@ if(false) {
 }
 
 /***/ }),
-/* 69 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(3)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -49649,7 +49868,7 @@ exports.push([module.i, "\nh1[data-v-10810eaa], h2[data-v-10810eaa] {\r\n  font-
 
 
 /***/ }),
-/* 70 */
+/* 75 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49745,6 +49964,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 tmpArr.push({
                     name: 'With T',
                     type: 'line',
+                    // smooth: true,
                     data: this.C[i],
                     color: '#404040'
                 });
@@ -49753,6 +49973,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 tmpArr.push({
                     name: 'Without T',
                     type: 'line',
+                    // smooth: true,
                     data: this.C0[i],
                     color: '#ff4d4d'
                 });
@@ -49763,7 +49984,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 71 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -49787,19 +50008,19 @@ if (false) {
 }
 
 /***/ }),
-/* 72 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(73)
+  __webpack_require__(78)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(75)
+var __vue_script__ = __webpack_require__(80)
 /* template */
-var __vue_template__ = __webpack_require__(76)
+var __vue_template__ = __webpack_require__(81)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -49838,17 +50059,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 73 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(74);
+var content = __webpack_require__(79);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(4)("1cef134c", content, false, {});
+var update = __webpack_require__(3)("1cef134c", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -49864,10 +50085,10 @@ if(false) {
 }
 
 /***/ }),
-/* 74 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(3)(false);
+exports = module.exports = __webpack_require__(2)(false);
 // imports
 
 
@@ -49878,7 +50099,7 @@ exports.push([module.i, "\nh1[data-v-077a0a5e], h2[data-v-077a0a5e] {\r\n  font-
 
 
 /***/ }),
-/* 75 */
+/* 80 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49992,7 +50213,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 
 /***/ }),
-/* 76 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -50016,230 +50237,52 @@ if (false) {
 }
 
 /***/ }),
-/* 77 */
+/* 82 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(82)
-}
-var normalizeComponent = __webpack_require__(1)
-/* script */
-var __vue_script__ = __webpack_require__(84)
-/* template */
-var __vue_template__ = __webpack_require__(85)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-345b1e70"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "assets\\js\\components\\MoistureTransfer1.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-345b1e70", Component.options)
-  } else {
-    hotAPI.reload("data-v-345b1e70", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(83);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(4)("06e7f955", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-345b1e70\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MoistureTransfer1.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-345b1e70\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./MoistureTransfer1.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 83 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\nh1[data-v-345b1e70], h2[data-v-345b1e70] {\r\n  font-weight: normal;\n}\nul[data-v-345b1e70] {\r\n  list-style-type: none;\r\n  padding: 0;\n}\nli[data-v-345b1e70] {\r\n  display: inline-block;\r\n  margin: 0 10px;\n}\na[data-v-345b1e70] {\r\n  color: #42b983;\n}\n.chart-wh[data-v-345b1e70]{\r\n    height: 900px;\r\n    width: 80vw;\n}\r\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 84 */
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+/* harmony export (immutable) */ __webpack_exports__["a"] = filteringSpeed;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__helpers_general_functions__ = __webpack_require__(5);
 
-//
-//
-//
-//
-//
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['data'],
-    data: function data() {
-        return {
-            h: [],
-            H: [],
-            legend: []
-        };
-    },
-    created: function created() {
-        for (var i = 1; i < this.$parent.moisture.length; ++i) {
-            console.log(this.$parent.moisture.length);
-            this.h.push(this.$parent.moisture[i][0] + 'm');
-            this.legend.push(this.$parent.moisture[i][0] + 'm');
+function filteringSpeed(H, C, T, i, j, h) {
+    var param = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : null;
+
+    var _Ki = Ki(H[i][j], C[i][j], T[i][j], H[i][j - 1], C[i][j - 1], T[i][j - 1]);
+    var koefC = Nui(C[i + 1][j + 1], C[i][j]) * (C[i + 1][j + 1] - C[i][j]) / h - Nui(C[i][j], C[i][j - 1]) * (C[i][j] - C[i][j - 1]) / h;
+    if (param == 'plus') {
+        if (j < H[0].length - 2) {
+            koefC = Nui(C[i + 1][j + 1], C[i][j]) * (C[i + 1][j + 2] - C[i + 1][j + 1]) / h - Nui(C[i][j], C[i][j - 1]) * (C[i + 1][j + 1] - C[i][j]) / h;
+            // console.log('koefC plus', koefC);
         }
-        for (var i = 1; i < this.$parent.moisture[0].length; ++i) {
-            this.H.push([]);
-            for (var j = 1; j < this.$parent.moisture.length; ++j) {
-                this.H[i - 1].push(this.$parent.moisture[j][i]);
-            }
-        }
-    },
-    mounted: function mounted() {
-        var dom = this.$refs.container;
-        var myChart = echarts.init(dom);
-        var app = {};
-        var option = null;
-        option = {
-            title: {
-                text: 'Moisture Transfer'
-            },
-            tooltip: {
-                trigger: 'axis'
-
-            },
-            legend: {
-                data: this.legend
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: [{
-                type: 'category',
-                boundaryGap: false,
-                data: this.h
-            }],
-            yAxis: [{
-                type: 'value'
-            }],
-            series: this.getChartData()
-
-        };
-        ;
-        if (option && (typeof option === 'undefined' ? 'undefined' : _typeof(option)) === "object") {
-            myChart.setOption(option, true);
-        }
-    },
-
-    methods: {
-        getChartData: function getChartData() {
-            var tmpArr = [];
-            for (var i in this.H) {
-                tmpArr.push({
-                    name: 'name' + i,
-                    type: 'line',
-                    // stack: 'stack',
-                    // label: {
-                    //   normal: {
-                    //     show: true,
-                    //   }
-                    // },
-                    // areaStyle: {normal: {}},
-                    data: this.H[i]
-                });
-            }
-            return tmpArr;
+    } else if (param == 'minus') {
+        if (j > 1) {
+            koefC = Nui(C[i][j + 1], C[i][j]) * (C[i][j] - C[i][j - 1]) / h - Nui(C[i][j], C[i][j - 1]) * (C[i][j - 1] - C[i][j - 2]) / h;
+            // console.log('koefC minus', koefC);
         }
     }
-});
-
-/***/ }),
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", {
-    ref: "container",
-    staticStyle: { height: "80vh", width: "80vw" },
-    attrs: { calss: "chart-wh" }
-  })
+    var result = -(_Ki * (H[i + 1][j + 1] - H[i + 1][j]) / h - _Ki * (H[i + 1][j] - H[i][j - 1]) / h) + mu2 * (T[i + 1][j + 1] - T[i][j]) / h + koefC;
+    return result;
 }
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-345b1e70", module.exports)
-  }
+
+function Ki(Hi, Ci, Ti, Hi_1, Ci_1, Ti_1) {
+    return 0.5 * (__WEBPACK_IMPORTED_MODULE_0__helpers_general_functions__["a" /* default */].k(Hi, Ci, Ti) + __WEBPACK_IMPORTED_MODULE_0__helpers_general_functions__["a" /* default */].k(Hi_1, Ci_1, Ti_1));
 }
+
+function Nui(Ci, Ci_1) {
+    return 0.5 * (__WEBPACK_IMPORTED_MODULE_0__helpers_general_functions__["a" /* default */].nu(Ci) + __WEBPACK_IMPORTED_MODULE_0__helpers_general_functions__["a" /* default */].nu(Ci_1));
+}
+
+var mu2 = 1;
 
 /***/ })
 /******/ ]);

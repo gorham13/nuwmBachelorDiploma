@@ -34,6 +34,13 @@ export default {
         var app = {};
         var option = null;
             option = {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
                 title: {
                     text: 'Heat-Mass Transfer'
                 },
@@ -83,7 +90,7 @@ export default {
           tmpArr.push({
             name:'name'+i,
             type:'line',
-            smooth: true,
+            // smooth: true,
             // stack: 'stack',
             // label: {
             //   normal: {

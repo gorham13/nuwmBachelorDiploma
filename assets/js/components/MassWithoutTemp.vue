@@ -91,6 +91,7 @@ export default {
           tmpArr.push({
             name:'With T',
             type:'line',
+            // smooth: true,
             data:this.C[i],
             color: '#404040'
           })
@@ -100,6 +101,7 @@ export default {
           tmpArr.push({
             name:'Without T',
             type:'line',
+            // smooth: true,
             data:this.C0[i],
             color: '#ff4d4d'
           })

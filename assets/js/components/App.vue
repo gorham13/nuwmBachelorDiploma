@@ -2,10 +2,10 @@
     <div class="container">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
+                <a class="nav-link " data-toggle="tab" href="#home">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#moisture">Moisture Tranfer</a>
+                <a class="nav-link" data-toggle="tab" href="#moisture">Moisture Transfer</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#heat">Heat Transfer</a>
@@ -14,14 +14,14 @@
                 <a class="nav-link" data-toggle="tab" href="#heat-mass">Heat-Mass Transfer</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#moisture-without-temp">moisture-without-temp</a>
+                <a class="nav-link active" data-toggle="tab" href="#moisture-without-temp">Moisture Compare</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#mass-without-temp">mass-without-temp</a>
+                <a class="nav-link" data-toggle="tab" href="#mass-without-temp">Mass Compare</a>
             </li>
         </ul>
         <div class="tab-content">
-            <div id="home" class="container tab-pane active"><br>
+            <div id="home" class="container tab-pane"><br>
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
@@ -124,13 +124,11 @@
                     <heat-transfer v-if="heat.length"></heat-transfer>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="table-responsive">
-                        <table class="table-sm">
-                            <tr v-for="item in heat">
-                                <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
-                            </tr>
-                        </table>
-                    </div>
+                    <table class="table-sm">
+                        <tr v-for="item in heat">
+                            <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div id="heat-mass" class="container tab-pane fade"><br>
@@ -138,30 +136,26 @@
                     <heat-mass-transfer v-if="heatMass.length"></heat-mass-transfer>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="table-responsive">
-                        <table class="table-sm">
-                            <tr v-for="item in heatMass">
-                                <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
-                            </tr>
-                        </table> 
-                    </div>   
+                    <table class="table-sm">
+                        <tr v-for="item in heatMass">
+                            <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
+                        </tr>
+                    </table> 
                 </div>
             </div>
-            <div id="moisture-without-temp" class="container tab-pane fade"><br>
+            <div id="moisture-without-temp" class="container tab-pane active"><br>
                 <div class="row justify-content-center">
                     <moisture-without-temp v-if="moistureWithoutTemp.length"></moisture-without-temp>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="table table-bordered">
-                        <table class="table-sm">
-                            <tr v-for="item in 3">
-                                <td v-for="subitem in moistureWithoutTemp[item - 1]">{{parseFloat(subitem).toFixed(6)}}</td>
-                            </tr>
-                            <tr v-for="item in 3">
-                                <td v-for="subitem in moisture[item]">{{parseFloat(subitem).toFixed(6)}}</td>
-                            </tr>
-                        </table>
-                    </div>
+                    <table class="table-sm">
+                        <tr v-for="item in 3">
+                            <td v-for="subitem in moistureWithoutTemp[item - 1]">{{parseFloat(subitem).toFixed(6)}}</td>
+                        </tr>
+                        <tr v-for="item in 3">
+                            <td v-for="subitem in moisture[item]">{{parseFloat(subitem).toFixed(6)}}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div id="mass-without-temp" class="container tab-pane fade"><br>
@@ -169,16 +163,14 @@
                     <mass-without-temp v-if="massWithoutTemp.length"></mass-without-temp>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="table-responsive">
-                        <table class="table-sm">
-                            <tr v-for="item in 4">
-                                <td v-for="subitem in massWithoutTemp[item - 1]">{{parseFloat(subitem).toFixed(6)}}</td>
-                            </tr>
-                            <tr v-for="item in 3">
-                                <td v-for="subitem in heatMass[item]">{{parseFloat(subitem).toFixed(6)}}</td>
-                            </tr>
-                        </table>
-                    </div>
+                    <table class="table-sm">
+                        <tr v-for="item in 4">
+                            <td v-for="subitem in massWithoutTemp[item - 1]">{{parseFloat(subitem).toFixed(6)}}</td>
+                        </tr>
+                        <tr v-for="item in 3">
+                            <td v-for="subitem in heatMass[item]">{{parseFloat(subitem).toFixed(6)}}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -197,12 +189,12 @@
                 massWithoutTemp: [],
                 T: 360,
                 dt: 30,
-                h1: 0.5,
-                h2: 1.5,
+                h1: 7,
+                h2: 1,
                 t1: 11,
-                t2: 5,
-                c1: 20,
-                c2: 5,
+                t2: 1,
+                c1: 15,
+                c2: 6,
                 n: 5,
             }
         },

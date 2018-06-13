@@ -64,9 +64,10 @@ export default {
                 ],
                 yAxis : [
                     {
-                        type : 'value'
+                        type : 'value',
                     }
                 ],
+                
                 series : this.getChartData()
                     
             };
@@ -83,7 +84,7 @@ export default {
           tmpArr.push({
             name:'name'+i,
             type:'line',
-            smooth: true,
+            // smooth: true,
             // stack: 'stack',
             // label: {
             //   normal: {

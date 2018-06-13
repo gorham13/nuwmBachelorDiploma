@@ -12,7 +12,7 @@ export default {
 
     nu(C){
         let ro = 1000000;
-        return 2.8*Math.pow(10, -5) + C/ro;
+        return 2.8*10**-5 + C/ro;
     },
 
     nextAlpha(prevAlpha, a, b, c){
@@ -39,7 +39,7 @@ function kh(){
     return 1/(1 + ro**2)
 }
 function kt(T){
-    return 0.014151*(T**5) - 0.026097*(T**4) + 0.010819*(T**3) + 0.012844*(T**2) + 90.010404*T + 0.0030925; 
+    return 0.014151*(T**5) - 0.026097*(T**4) + 0.010819*(T**3) + 0.012844*(T**2) + 0.010404*T + 0.0030925; 
 }
 
 let Cz = 350;

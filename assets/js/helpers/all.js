@@ -16,44 +16,65 @@ export default function res(Td, dt, h1, h2, t1, t2, c1, c2, n) {
 
 
     for(var j = 0; j < Td/dt; ++j){
-        H[0][j] = h1*1 - (h1 - h22)*j*dt/Td;//h2 - j*dt*(h2 - h1)/Td;//0.02*j;//Math.exp(-3*j*dt);
+        H[0][j] = (h2-h1)/Td*j*dt + h1*1;//h2 - j*dt*(h2 - h1)/Td;//0.02*j;//Math.exp(-3*j*dt);
         if(H[0][j] < 0){
             H[0][j] = 0;
         }
-        T[0][j] = t1*1 - (t1 - t22)*j*dt/Td;
-        C[0][j] = c1*1 - (c1 - c22)*j*dt/Td;
-        H0[0][j] =  h1*1 - (h1 - h22)*j*dt/Td;
-        T0[0][j] = t1*1 - (t1 - t22)*j*dt/Td;
-        C0[0][j] = c1*1 - (c1 - c22)*j*dt/Td;
+        T[0][j] = (t2-t1)/Td*j*dt + t1*1;//t1*1 - (t1 - t22)*j*dt/Td;
+        C[0][j] = (c2-c1)/Td*j*dt + c1*1;//c1*1 - (c1 - c22)*j*dt/Td;
+        if(C[0][j] < 0){
+            C[0][j] = 0;
+        }
+        H0[0][j] =  (h2-h1)/Td*j*dt + h1*1;;
+        if(H0[0][j] < 0){
+            H0[0][j] = 0;
+        }
+        T0[0][j] = 0//(t2-t1)/Td*j*dt + t1*1;;
+        C0[0][j] = (c2-c1)/Td*j*dt + c1*1;
+        if(C0[0][j] < 0){
+            C0[0][j] = 0;
+        }
     }
-    let dh = (h2 - h1)/n;
-    let dt1 = (t2 - t1)/n;
+    let dh = Math.abs(h2 - h1)/n;
+    let dt1 = Math.abs(t2 - t1)/n;
     // console.log('t1', t1, 't2', t2, 'dt', dt1);
-    let dc = (c2 - c1)/n;
+    let dc = Math.abs(c2 - c1)/n;
     for(var i = 0; i <= n; ++i){
         H.push([]);
-        H[i][j - 1] = h1*1 + i*dh - dt/45;
-        H[i][0] = h1*1 + i*dh;
+        H[i][j - 1] = h2;
+        if(H[i][j - 1] < 0){
+            H[i][j - 1] = 0;
+        }
+        H[i][0] = h1;
 
         T.push([]);
-        T[i][j - 1] = t1*1 + i*dt1 - dt/45;;
-        T[i][0] = t1*1 + i*dt1;
+        T[i][j - 1] = t2;
+        T[i][0] = t1;
 
         C.push([]);
-        C[i][j - 1] = c1*1 + i*dc - dt/15;
-        C[i][0] = c1*1 + i*dc;
+        C[i][j - 1] = c2;
+        if(C[i][j - 1] < 0){
+            C[i][j - 1] = 0;
+        }
+        C[i][0] = c1;
 
         H0.push([]);
-        H0[i][j - 1] = h1*1 + i*dh - dt/45;
-        H0[i][0] = h1*1 + i*dh;
+        H0[i][j - 1] = h2;
+        if(H0[i][j - 1] < 0){
+            H0[i][j - 1] = 0;
+        }
+        H0[i][0] = h1;
 
         T0.push([]);
-        T0[i][j - 1] = t1*1 + i*dt1;
-        T0[i][0] = t1*1 + i*dt1;
+        T0[i][j - 1] = 0;
+        T0[i][0] = 0;
 
         C0.push([]);
-        C0[i][j - 1] = c1*1 + i*dc - dt/15;
-        C0[i][0] = c1*1 + i*dc;
+        C0[i][j - 1] = c2;
+        if(C0[i][j - 1] < 0){
+            C0[i][j - 1] = 0;
+        }
+        C0[i][0] = c1;
     }
     H.splice(-1,1);
     H0.splice(-1,1);

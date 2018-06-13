@@ -9,7 +9,7 @@ export default function nextT(H, C, T, i, j, beta, alpha, h) {
     let _b = b(_Vx, h);
     let _c = c(_a, _b, h);
     let _f = f(T, i, j, h);
-    
+
     beta.heat = generalFunctions.nextBeta(beta.heat, alpha.heat, _a, _c, _f);
     alpha.heat = generalFunctions.nextAlpha(alpha.heat, _a, _b, _c);
 
@@ -49,5 +49,5 @@ function fi(Vx, h){
 }
 
 let lambda = 108;
-let Cp=4.2*10**6;//Cp = 2137;//4.2
+let Cp = 4.2*10**6;//Cp = 2137;//4.2
 let Cn = 3*10**6;//4.2;
