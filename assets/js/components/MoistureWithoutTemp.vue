@@ -17,7 +17,7 @@ export default {
     created(){
         let day = 0;
         for(var j = 1; j < this.$parent.moisture[0].length - 1; ++j){
-            day += this.$parent.dt;
+            day += this.$parent.dt*1;
             this.dates.push('day ' + day);
             // this.legend.push('day ' + day);
         }
@@ -43,7 +43,7 @@ export default {
         var option = null;
             option = {
                 title: {
-                    text: 'Сomparison Moisture Transfer with and without Temperature'
+                    text: 'Comparison Moisture Transfer with and without Temperature'
                 },
                 tooltip : {
                     trigger: 'axis',
@@ -92,7 +92,7 @@ export default {
             name:'With T',
             type:'line',
             data:this.H[i],
-            color: '#404040'
+            color: '#ff4d4d'
           })
         }
         for(var i in this.H0)
@@ -101,7 +101,7 @@ export default {
             name:'Without T',
             type:'line',
             data:this.H0[i],
-            color: '#ff4d4d'
+            color: '#404040'
           })
         }
         return tmpArr;

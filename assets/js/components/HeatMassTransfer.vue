@@ -15,15 +15,15 @@ export default {
     },
     created(){
         let day = 0;
-        for(var j = 1; j < this.$parent.heatMass[0].length; ++j){
-            day += this.$parent.dt;
+        for(var j = 1; j < this.$parent.heatMass[0].length - 1; ++j){
+            day += this.$parent.dt*1;
             this.dates.push('day ' + day);
             // this.legend.push('day ' + day);
         }
         
         for(var i = 1; i < this.$parent.heatMass.length; ++i){
             this.C.push([]);
-            for(var j = 1; j < this.$parent.heatMass[i].length; ++j){
+            for(var j = 1; j < this.$parent.heatMass[i].length - 1; ++j){
                 this.C[i - 1].push(this.$parent.heatMass[i][j]);
             }
         }
@@ -88,7 +88,7 @@ export default {
         for(var i in this.C)
         {
           tmpArr.push({
-            name:'name'+i,
+            name: i+' m',
             type:'line',
             // smooth: true,
             // stack: 'stack',

@@ -112,10 +112,12 @@
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <table class="table-sm">
-                        <tr v-for="item in moisture">
-                            <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
-                        </tr>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr v-for="item in moisture">
+                                <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -124,22 +126,43 @@
                     <heat-transfer v-if="heat.length"></heat-transfer>
                 </div>
                 <div class="row justify-content-center">
-                    <table class="table-sm">
-                        <tr v-for="item in heat">
-                            <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
-                        </tr>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr v-for="item in heat">
+                                <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
             <div id="heat-mass" class="container tab-pane fade"><br>
-                <div class="row justify-content-center">
-                    <heat-mass-transfer v-if="heatMass.length"></heat-mass-transfer>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#with-date1">By Days</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#with-depth1">By Depth</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="with-date1" class="container tab-pane active"><br>
+                        <div class="row justify-content-center">
+                            <heat-mass-transfer v-if="heatMass.length"></heat-mass-transfer>
+                        </div>
+                    </div>
+                    <div id="with-depth1" class="container tab-pane fade"><br>
+                        <div class="row justify-content-center">
+                            <heat-mass-transfer1 v-if="heatMass.length"></heat-mass-transfer1>
+                        </div>
+                    </div>
                 </div>
                 <div class="row justify-content-center">
-                    <table class="table-sm">
-                        <tr v-for="item in heatMass">
-                            <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
-                        </tr>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr v-for="item in heatMass">
+                                <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
+                            </tr>
+                        </tbody>
                     </table> 
                 </div>
             </div>
@@ -148,30 +171,22 @@
                     <moisture-without-temp v-if="moistureWithoutTemp.length"></moisture-without-temp>
                 </div>
                 <div class="row justify-content-center">
-                    <table class="table-sm">
-                        <tr v-for="item in 3">
-                            <td v-for="subitem in moistureWithoutTemp[item - 1]">{{parseFloat(subitem).toFixed(6)}}</td>
-                        </tr>
-                        <tr v-for="item in 3">
-                            <td v-for="subitem in moisture[item]">{{parseFloat(subitem).toFixed(6)}}</td>
-                        </tr>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr><td>without temp</td></tr>
+                            <tr v-for="item in 3">
+                                <td v-for="subitem in moistureWithoutTemp[item]">{{parseFloat(subitem).toFixed(6)}}</td>
+                            </tr>
+                            <tr><td>with temp</td></tr>
+                            <tr v-for="item in 3">
+                                <td v-for="subitem in moisture[item]">{{parseFloat(subitem).toFixed(6)}}</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
             <div id="mass-without-temp" class="container tab-pane fade"><br>
-                <div class="row justify-content-center">
-                    <mass-without-temp v-if="massWithoutTemp.length"></mass-without-temp>
-                </div>
-                <div class="row justify-content-center">
-                    <table class="table-sm">
-                        <tr v-for="item in 4">
-                            <td v-for="subitem in massWithoutTemp[item - 1]">{{parseFloat(subitem).toFixed(6)}}</td>
-                        </tr>
-                        <tr v-for="item in 3">
-                            <td v-for="subitem in heatMass[item]">{{parseFloat(subitem).toFixed(6)}}</td>
-                        </tr>
-                    </table>
-                </div>
+                <mass-without-temp v-if="massWithoutTemp.length"></mass-without-temp>
             </div>
         </div>
     </div>
@@ -189,12 +204,12 @@
                 massWithoutTemp: [],
                 T: 360,
                 dt: 30,
-                h1: 7,
+                h1: 6,
                 h2: 1,
-                t1: 11,
-                t2: 1,
-                c1: 15,
-                c2: 6,
+                t1: 16,
+                t2: 5,
+                c1: 6,
+                c2: 3,
                 n: 5,
             }
         },
@@ -206,15 +221,17 @@
                 this.moisture = [];
                 this.heat = [];
                 this.heatMass = [];
+                this.moistureWithoutTemp = [];
+                this.massWithoutTemp = [];
 
                 setTimeout(()=>{
                     let _res = res(this.T, this.dt, this.h1, this.h2, this.t1, this.t2, this.c1, this.c2, this.n);
-
                     this.moisture = _res.H;
                     this.heat = _res.T;
                     this.heatMass = _res.C;
-                    this.moistureWithoutTemp = _res.H0;
-                    this.massWithoutTemp = _res.C0;
+                    _res = res(this.T, this.dt, this.h1, this.h2, 0, 0, this.c1, this.c2, this.n);
+                    this.moistureWithoutTemp = _res.H;
+                    this.massWithoutTemp = _res.C;
                 });
             }
         }

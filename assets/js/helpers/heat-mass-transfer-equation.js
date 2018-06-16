@@ -13,11 +13,13 @@ export default function nextC(H, C, T, i, j, beta, alpha, h, tau) {
     let _c = c(_a, _b, tau);
 
     let _f = f(C, T, i, j, h, tau);
+
+    // console.log('_Vx, _d_i, _d_i1, _a, _b, _c, _f', _Vx, _d_i, _d_i1, _a, _b, _c, _f);
     
     beta.heatMass = generalFunctions.nextBeta(beta.heatMass, alpha.heatMass, _a, _c, _f);
     alpha.heatMass = generalFunctions.nextAlpha(alpha.heatMass, _a, _b, _c);
     
-    return alpha.heatMass*C[i][j + 1] + beta.heatMass;
+    return alpha.heatMass*C[i][j + 1] + beta.heatMass - i*0.05;
 };
 
 function a(Vx, d_i, h){

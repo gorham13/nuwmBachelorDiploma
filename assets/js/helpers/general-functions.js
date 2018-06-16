@@ -7,6 +7,9 @@ export default {
     },
 
     k(H, C, T){
+        if(T==0){
+            return kch(C, H);
+        }
         return (kct(C, T) + kch(C, H))/2;
     },
 
@@ -39,6 +42,9 @@ function kh(){
     return 1/(1 + ro**2)
 }
 function kt(T){
+    if(T==0){
+        return 0;
+    }
     return 0.014151*(T**5) - 0.026097*(T**4) + 0.010819*(T**3) + 0.012844*(T**2) + 0.010404*T + 0.0030925; 
 }
 

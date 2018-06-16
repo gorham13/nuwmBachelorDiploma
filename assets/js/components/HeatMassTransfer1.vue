@@ -14,14 +14,14 @@ export default {
         }
     },
     created(){
-        for(var i = 1; i < this.$parent.moisture.length; ++i){
+        for(var i = 1; i < this.$parent.heatMass.length; ++i){
             this.h.push(i + 'm');
             this.legend.push(i + 'm');
         }
-        for(var i = 1; i < this.$parent.moisture[0].length; ++i){
+        for(var i = 1; i < this.$parent.heatMass[0].length - 1; ++i){
             this.H.push([]);
-            for(var j = 1; j < this.$parent.moisture.length; ++j){
-                this.H[i - 1].push(this.$parent.moisture[j][i]);
+            for(var j = 1; j < this.$parent.heatMass.length; ++j){
+                this.H[i - 1].push(this.$parent.heatMass[j][i]);
             }
         }
     },
@@ -32,7 +32,7 @@ export default {
         var option = null;
             option = {
                 title: {
-                    text: 'Moisture Transfer'
+                    text: 'Heat-Mass Transfer'
                 },
                 tooltip : {
                     trigger: 'axis',
