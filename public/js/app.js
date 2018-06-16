@@ -48089,7 +48089,7 @@ function nextT(H, C, T, i, j, beta, alpha, h) {
 
     beta.heat = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextBeta(beta.heat, alpha.heat, _a, _c, _f);
     alpha.heat = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextAlpha(alpha.heat, _a, _b, _c);
-    return alpha.heat * T[i][j + 1] + beta.heat - 0.1 * i;
+    return alpha.heat * T[i][j + 1] + beta.heat; // - 0.1*i;
 };
 
 function a(Vx, h) {
@@ -48754,7 +48754,43 @@ var render = function() {
                 : _vm._e()
             ],
             1
-          )
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row justify-content-center" }, [
+            _c("table", { staticClass: "table table-sm table-bordered" }, [
+              _c(
+                "tbody",
+                [
+                  _vm._m(3),
+                  _vm._v(" "),
+                  _vm._l(5, function(item) {
+                    return _c(
+                      "tr",
+                      _vm._l(_vm.moistureWithoutTemp[item], function(subitem) {
+                        return _c("td", [
+                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                        ])
+                      })
+                    )
+                  }),
+                  _vm._v(" "),
+                  _vm._m(4),
+                  _vm._v(" "),
+                  _vm._l(5, function(item) {
+                    return _c(
+                      "tr",
+                      _vm._l(_vm.moisture[item], function(subitem) {
+                        return _c("td", [
+                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                        ])
+                      })
+                    )
+                  })
+                ],
+                2
+              )
+            ])
+          ])
         ]
       ),
       _vm._v(" "),
@@ -48914,6 +48950,18 @@ var staticRenderFns = [
         ])
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [_c("td", [_vm._v("without temp")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [_c("td", [_vm._v("with temp")])])
   }
 ]
 render._withStripped = true
@@ -49517,7 +49565,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         for (var i = 1; i < this.$parent.heat.length; ++i) {
             this.T.push([]);
             for (var j = 1; j < this.$parent.heat[i].length - 1; ++j) {
-                this.T[i - 1].push(this.$parent.heat[i][j]);
+                this.T[i - 1].push(this.$parent.heat[i][j] - 0.1 * i);
             }
         }
     },

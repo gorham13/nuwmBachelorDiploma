@@ -170,20 +170,20 @@
                 <div class="row justify-content-center">
                     <moisture-without-temp v-if="moistureWithoutTemp.length"></moisture-without-temp>
                 </div>
-                <!-- <div class="row justify-content-center">
+                <div class="row justify-content-center">
                     <table class="table table-sm table-bordered">
                         <tbody>
                             <tr><td>without temp</td></tr>
-                            <tr v-for="item in 3">
+                            <tr v-for="item in 5">
                                 <td v-for="subitem in moistureWithoutTemp[item]">{{parseFloat(subitem).toFixed(6)}}</td>
                             </tr>
                             <tr><td>with temp</td></tr>
-                            <tr v-for="item in 3">
+                            <tr v-for="item in 5">
                                 <td v-for="subitem in moisture[item]">{{parseFloat(subitem).toFixed(6)}}</td>
                             </tr>
                         </tbody>
                     </table>
-                </div> -->
+                </div>
             </div>
             <div id="mass-without-temp" class="container tab-pane fade"><br>
                 <mass-without-temp v-if="massWithoutTemp.length"></mass-without-temp>

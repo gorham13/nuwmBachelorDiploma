@@ -24,7 +24,7 @@ export default {
         for(var i = 1; i < this.$parent.heat.length; ++i){
             this.T.push([]);
             for(var j = 1; j < this.$parent.heat[i].length - 1; ++j){
-                this.T[i - 1].push(this.$parent.heat[i][j]);
+                this.T[i - 1].push(this.$parent.heat[i][j]-0.1*i);
             }
         }
     },
