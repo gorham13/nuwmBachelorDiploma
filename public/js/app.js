@@ -48754,43 +48754,7 @@ var render = function() {
                 : _vm._e()
             ],
             1
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("table", { staticClass: "table table-sm table-bordered" }, [
-              _c(
-                "tbody",
-                [
-                  _vm._m(3),
-                  _vm._v(" "),
-                  _vm._l(5, function(item) {
-                    return _c(
-                      "tr",
-                      _vm._l(_vm.moistureWithoutTemp[item], function(subitem) {
-                        return _c("td", [
-                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                        ])
-                      })
-                    )
-                  }),
-                  _vm._v(" "),
-                  _vm._m(4),
-                  _vm._v(" "),
-                  _vm._l(5, function(item) {
-                    return _c(
-                      "tr",
-                      _vm._l(_vm.moisture[item], function(subitem) {
-                        return _c("td", [
-                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                        ])
-                      })
-                    )
-                  })
-                ],
-                2
-              )
-            ])
-          ])
+          )
         ]
       ),
       _vm._v(" "),
@@ -48950,18 +48914,6 @@ var staticRenderFns = [
         ])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [_c("td", [_vm._v("without temp")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [_c("td", [_vm._v("with temp")])])
   }
 ]
 render._withStripped = true
@@ -50240,7 +50192,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("tr", [
-      _c("td", [_vm._v("without temp")]),
+      _c("td", [_vm._v("with temp")]),
       _vm._v(" "),
       _c("td", [_vm._v("1m")]),
       _vm._v(" "),
@@ -50615,7 +50567,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("tr", [
-      _c("td", [_vm._v("without temp")]),
+      _c("td", [_vm._v("with temp")]),
       _vm._v(" "),
       _c("td", [_vm._v("1m")]),
       _vm._v(" "),

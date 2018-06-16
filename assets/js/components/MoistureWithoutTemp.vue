@@ -19,7 +19,7 @@
                         <td v-for="subitem in item">{{parseFloat(subitem).toFixed(6)}}</td>
                     </tr><tr><td></td></tr>
                     <tr>
-                        <td>without temp</td>
+                        <td>with temp</td>
                         <td>1m</td>
                         <td>2m</td>
                         <td>3m</td>
