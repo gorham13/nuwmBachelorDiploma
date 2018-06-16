@@ -12,7 +12,7 @@ export default function nextT(H, C, T, i, j, beta, alpha, h) {
 
     beta.heat = generalFunctions.nextBeta(beta.heat, alpha.heat, _a, _c, _f);
     alpha.heat = generalFunctions.nextAlpha(alpha.heat, _a, _b, _c);
-    return alpha.heat*T[i][j + 1] + beta.heat;
+    return alpha.heat*T[i][j + 1] + beta.heat - 0.1*i;
 };
 
 function a(Vx, h){

@@ -48089,7 +48089,7 @@ function nextT(H, C, T, i, j, beta, alpha, h) {
 
     beta.heat = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextBeta(beta.heat, alpha.heat, _a, _c, _f);
     alpha.heat = __WEBPACK_IMPORTED_MODULE_0__general_functions__["a" /* default */].nextAlpha(alpha.heat, _a, _b, _c);
-    return alpha.heat * T[i][j + 1] + beta.heat;
+    return alpha.heat * T[i][j + 1] + beta.heat - 0.1 * i;
 };
 
 function a(Vx, h) {
@@ -48754,43 +48754,7 @@ var render = function() {
                 : _vm._e()
             ],
             1
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "row justify-content-center" }, [
-            _c("table", { staticClass: "table table-sm table-bordered" }, [
-              _c(
-                "tbody",
-                [
-                  _vm._m(3),
-                  _vm._v(" "),
-                  _vm._l(3, function(item) {
-                    return _c(
-                      "tr",
-                      _vm._l(_vm.moistureWithoutTemp[item], function(subitem) {
-                        return _c("td", [
-                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                        ])
-                      })
-                    )
-                  }),
-                  _vm._v(" "),
-                  _vm._m(4),
-                  _vm._v(" "),
-                  _vm._l(3, function(item) {
-                    return _c(
-                      "tr",
-                      _vm._l(_vm.moisture[item], function(subitem) {
-                        return _c("td", [
-                          _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
-                        ])
-                      })
-                    )
-                  })
-                ],
-                2
-              )
-            ])
-          ])
+          )
         ]
       ),
       _vm._v(" "),
@@ -48950,18 +48914,6 @@ var staticRenderFns = [
         ])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [_c("td", [_vm._v("without temp")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [_c("td", [_vm._v("with temp")])])
   }
 ]
 render._withStripped = true
@@ -50367,38 +50319,88 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['data'],
     data: function data() {
         return {
-            dates: [],
+            h: [],
             H: [],
             H0: [],
             legend: []
         };
     },
     created: function created() {
-        var day = 0;
-        for (var j = 1; j < this.$parent.moisture[0].length - 1; ++j) {
-            day += this.$parent.dt * 1;
-            this.dates.push('day ' + day);
-            // this.legend.push('day ' + day);
+        for (var i = 1; i < this.$parent.moisture.length; ++i) {
+            this.h.push(i + 'm');
+            this.legend.push(i + 'm');
         }
-
-        for (var i = 1; i < 4; ++i) {
+        for (var i = this.$parent.moisture[0].length - 4; i < this.$parent.moisture[0].length - 1; ++i) {
             this.H.push([]);
-            for (var j = 1; j < this.$parent.moisture[i].length - 1; ++j) {
-                this.H[i - 1].push(this.$parent.moisture[i][j]);
+            for (var j = 1; j < this.$parent.moisture.length; ++j) {
+                this.H[i - (this.$parent.moisture[0].length - 4)].push(this.$parent.moisture[j][i]);
             }
         }
-
-        for (var i = 1; i < 4; ++i) {
+        for (var i = this.$parent.moisture[0].length - 4; i < this.$parent.moisture[0].length - 1; ++i) {
             this.H0.push([]);
-            for (var j = 1; j < this.$parent.moistureWithoutTemp[i].length - 1; ++j) {
-                this.H0[i - 1].push(this.$parent.moistureWithoutTemp[i][j]);
+            for (var j = 1; j < this.$parent.moisture.length; ++j) {
+                this.H0[i - (this.$parent.moisture[0].length - 4)].push(this.$parent.moistureWithoutTemp[j][i]);
             }
         }
+        // let day = 0;
+        // for(var j = 1; j < this.$parent.heatMass[0].length - 1; ++j){
+        //     day += this.$parent.dt*1;
+        //     this.dates.push('day ' + day);
+        //     // this.legend.push('day ' + day);
+        // }
+
+        // for(var i = 1; i < 4; ++i){
+        //     this.H.push([]);
+        //     for(var j = 1; j < this.$parent.heatMass[i].length - 1; ++j){
+        //         this.H[i - 1].push(this.$parent.heatMass[i][j]);
+        //     }
+        // }
+
+        // for(var i = 1; i < 4; ++i){
+        //     this.H0.push([]);
+        //     for(var j = 1; j < this.$parent.massWithoutTemp[i].length - 1; ++j){
+        //         this.H0[i - 1].push(this.$parent.massWithoutTemp[i][j]);
+        //     }
+        // }
     },
     mounted: function mounted() {
         var dom = this.$refs.container;
@@ -50407,7 +50409,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         var option = null;
         option = {
             title: {
-                text: 'Comparison Moisture Transfer with and without Temperature'
+                text: 'Comparison Mass Transfer With and Without Temperature'
             },
             tooltip: {
                 trigger: 'axis'
@@ -50430,7 +50432,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             xAxis: [{
                 type: 'category',
                 boundaryGap: false,
-                data: this.dates
+                data: this.h
             }],
             yAxis: [{
                 type: 'value'
@@ -50449,16 +50451,18 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             var tmpArr = [];
             for (var i in this.H) {
                 tmpArr.push({
-                    name: 'With T',
+                    name: 'With T day ' + (240 + 30 * i),
                     type: 'line',
+                    // smooth: true,
                     data: this.H[i],
                     color: '#ff4d4d'
                 });
             }
             for (var i in this.H0) {
                 tmpArr.push({
-                    name: 'Without T',
+                    name: 'Without T day' + (240 * 1 + 30 * i),
                     type: 'line',
+                    // smooth: true,
                     data: this.H0[i],
                     color: '#404040'
                 });
@@ -50476,13 +50480,107 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", {
-    ref: "container",
-    staticStyle: { height: "80vh", width: "80vw" },
-    attrs: { calss: "chart-wh" }
-  })
+  return _c("div", [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", {
+        ref: "container",
+        staticStyle: { height: "80vh", width: "80vw" },
+        attrs: { calss: "chart-wh" }
+      })
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("table", { staticClass: "table table-sm table-bordered" }, [
+        _c(
+          "tbody",
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._l(_vm.H0, function(item, index) {
+              return _c(
+                "tr",
+                [
+                  _c("td", [_vm._v("day " + _vm._s(240 + index * 30))]),
+                  _vm._v(" "),
+                  _vm._l(item, function(subitem) {
+                    return _c("td", [
+                      _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                    ])
+                  })
+                ],
+                2
+              )
+            }),
+            _vm._m(1),
+            _vm._v(" "),
+            _vm._m(2),
+            _vm._v(" "),
+            _vm._l(_vm.H, function(item, index) {
+              return _c(
+                "tr",
+                [
+                  _c("td", [_vm._v("day " + _vm._s(240 + index * 30) + "  ")]),
+                  _vm._v(" "),
+                  _vm._l(item, function(subitem) {
+                    return _c("td", [
+                      _vm._v(_vm._s(parseFloat(subitem).toFixed(6)))
+                    ])
+                  })
+                ],
+                2
+              )
+            })
+          ],
+          2
+        )
+      ])
+    ])
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("td", [_vm._v("without temp")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("1m")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("2m")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("3m")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("4m")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("5m")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [_c("td")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("td", [_vm._v("without temp")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("1m")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("2m")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("3m")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("4m")]),
+      _vm._v(" "),
+      _c("td", [_vm._v("5m")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
